@@ -13,10 +13,10 @@ import { Photo } from "@/components/Photo";
 import { Reveal, Marquee, CountUp } from "@/components/motion";
 import type { IndustryId } from "@/lib/types";
 
-const THEME: Record<IndustryId, { hex: string; soft: string; ring: string }> = {
-  dental: { hex: "#7c3aed", soft: "#ede9fe", ring: "ring-[#7c3aed]" },
-  medical: { hex: "#2563eb", soft: "#dbeafe", ring: "ring-[#2563eb]" },
-  veterinary: { hex: "#0d9488", soft: "#ccfbf1", ring: "ring-[#0d9488]" },
+const THEME: Record<IndustryId, { hex: string; soft: string }> = {
+  dental: { hex: "#5b21b6", soft: "#ede9fe" },
+  medical: { hex: "#1e40af", soft: "#dbeafe" },
+  veterinary: { hex: "#047857", soft: "#d1fae5" },
 };
 
 function SectionHead({ eyebrow, title, href, hrefLabel = "View all", center = false }: {
@@ -69,13 +69,13 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0">
           <div className="animate-blob absolute -left-24 -top-24 h-80 w-80 bg-primary/25 blur-3xl" />
           <div className="animate-blob absolute -right-16 top-20 h-72 w-72 bg-accent/20 blur-3xl" style={{ animationDelay: "-5s" }} />
-          <div className="animate-blob absolute bottom-0 left-1/3 h-64 w-64 bg-[#0d9488]/15 blur-3xl" style={{ animationDelay: "-9s" }} />
+          <div className="animate-blob absolute bottom-0 left-1/3 h-64 w-64 bg-[#b8924f]/20 blur-3xl" style={{ animationDelay: "-9s" }} />
         </div>
 
         <div className="container-page relative grid gap-10 py-14 md:grid-cols-2 md:py-20">
           <div className="flex flex-col justify-center animate-fade-up">
-            <span className="chip mb-4 w-fit bg-white text-primary shadow-sm">
-              <Sparkles className="h-4 w-4 text-accent" /> One-stop healthcare supplier · Canada
+            <span className="chip mb-4 w-fit border border-line bg-white text-primary shadow-sm">
+              <Sparkles className="h-4 w-4 text-gold" /> One-stop healthcare supplier · Canada
             </span>
             <h1 className="text-4xl font-extrabold leading-[1.04] text-ink md:text-5xl lg:text-[3.5rem]">
               <span className="text-gradient">Dental, Medical &amp; Veterinary</span> supplies — one trusted source.
@@ -171,7 +171,7 @@ export default function HomePage() {
         <div className="container-page">
           <Reveal>
             <div className="mb-10 text-center">
-              <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.18em] text-coral">Why Mankind Healthcare</p>
+              <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold">Why Mankind Healthcare</p>
               <h2 className="text-2xl font-bold md:text-[2rem]">Everything your practice needs, in one order</h2>
               <p className="mx-auto mt-3 max-w-2xl text-slate-300">
                 Stop juggling multiple suppliers. From dental chairside to hospital wards to the
@@ -233,7 +233,7 @@ export default function HomePage() {
       {offers.length ? (
         <section className="container-page pb-16">
           <Reveal>
-            <div className="animate-gradient overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-[#7c3aed] to-accent px-6 py-9 md:px-12">
+            <div className="animate-gradient overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-accent to-gold px-6 py-9 md:px-12">
               <div className="grid items-center gap-4 md:grid-cols-[1fr_auto]">
                 <div className="text-white">
                   <p className="mb-1 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">

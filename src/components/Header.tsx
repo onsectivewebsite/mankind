@@ -12,9 +12,9 @@ import { CategoryIcon } from "./CategoryIcon";
 import type { IndustryId } from "@/lib/types";
 
 const INDUSTRY_COLOR: Record<IndustryId, { text: string; soft: string; dot: string }> = {
-  dental: { text: "text-[#7c3aed]", soft: "bg-[#ede9fe]", dot: "bg-[#7c3aed]" },
-  medical: { text: "text-[#2563eb]", soft: "bg-[#dbeafe]", dot: "bg-[#2563eb]" },
-  veterinary: { text: "text-[#0d9488]", soft: "bg-[#ccfbf1]", dot: "bg-[#0d9488]" },
+  dental: { text: "text-[#5b21b6]", soft: "bg-[#ede9fe]", dot: "bg-[#5b21b6]" },
+  medical: { text: "text-[#1e40af]", soft: "bg-[#dbeafe]", dot: "bg-[#1e40af]" },
+  veterinary: { text: "text-[#047857]", soft: "bg-[#d1fae5]", dot: "bg-[#047857]" },
 };
 
 function Brand() {
@@ -83,10 +83,10 @@ export function Header() {
             <Truck className="h-3.5 w-3.5" /> One-stop supplier · Dental · Medical · Veterinary · Free dispatch over $250
           </span>
           <div className="flex items-center gap-4">
-            <a href="tel:+14372682091" className="inline-flex items-center gap-1.5 hover:text-coral">
+            <a href="tel:+14372682091" className="inline-flex items-center gap-1.5 hover:text-gold">
               <Phone className="h-3.5 w-3.5" /> +1 437 268 2091
             </a>
-            <a href="mailto:info@mankindhealthcare.com" className="inline-flex items-center gap-1.5 hover:text-coral">
+            <a href="mailto:info@mankindhealthcare.com" className="inline-flex items-center gap-1.5 hover:text-gold">
               <Mail className="h-3.5 w-3.5" /> info@mankindhealthcare.com
             </a>
           </div>

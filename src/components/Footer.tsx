@@ -15,7 +15,7 @@ export function Footer() {
             { icon: Headset, title: "Expert Support", text: "Across all 3 fields" },
           ].map((f) => (
             <div key={f.title} className="flex items-start gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-coral">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-gold">
                 <f.icon className="h-5 w-5" />
               </span>
               <div>
@@ -49,13 +49,13 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {categoriesByIndustry(ind.id).slice(0, 5).map((c) => (
                 <li key={c.id}>
-                  <Link href={`/products?category=${c.id}`} className="text-slate-400 hover:text-coral">
+                  <Link href={`/products?category=${c.id}`} className="text-slate-400 hover:text-gold">
                     {c.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href={`/products?industry=${ind.id}`} className="font-medium text-coral hover:underline">
+                <Link href={`/products?industry=${ind.id}`} className="font-medium text-gold hover:underline">
                   All {ind.name} →
                 </Link>
               </li>
@@ -67,17 +67,17 @@ export function Footer() {
           <h3 className="mb-3 font-display text-sm font-semibold text-white">Get in touch</h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <a href="tel:+14372682091" className="flex items-center gap-2.5 text-slate-300 hover:text-coral">
-                <Phone className="h-4 w-4 shrink-0 text-coral" /> +1 437 268 2091
+              <a href="tel:+14372682091" className="flex items-center gap-2.5 text-slate-300 hover:text-gold">
+                <Phone className="h-4 w-4 shrink-0 text-gold" /> +1 437 268 2091
               </a>
             </li>
             <li>
-              <a href="mailto:info@mankindhealthcare.com" className="flex items-center gap-2.5 text-slate-300 hover:text-coral">
-                <Mail className="h-4 w-4 shrink-0 text-coral" /> info@mankindhealthcare.com
+              <a href="mailto:info@mankindhealthcare.com" className="flex items-center gap-2.5 text-slate-300 hover:text-gold">
+                <Mail className="h-4 w-4 shrink-0 text-gold" /> info@mankindhealthcare.com
               </a>
             </li>
             <li className="flex items-start gap-2.5 text-slate-300">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-coral" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
               105, Mall Road, Canada
             </li>
           </ul>
