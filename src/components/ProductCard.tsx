@@ -22,7 +22,7 @@ export function ProductCard({ product }: { product: PricedProduct }) {
   };
 
   return (
-    <div className="card group flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-[var(--shadow-lift)]">
+    <div className="card group flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
       <Link
         href={`/products/${product.id}`}
         className="relative block"

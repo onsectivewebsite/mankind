@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { PRODUCTS } from "@/data/catalog";
+import { PRODUCTS, categoryById } from "@/data/catalog";
 import type { Offer, Product } from "@/lib/types";
 
 type NewProductInput = {
@@ -89,6 +89,7 @@ export const useCatalog = create<CatalogState>()(
           name: input.name,
           slug: `${slugify(input.name)}-${seq}`,
           categoryId: input.categoryId,
+          industryId: categoryById(input.categoryId)?.industry ?? "dental",
           brand: input.brand || "MankindPro",
           mrp: input.mrp || input.price,
           price: input.price,

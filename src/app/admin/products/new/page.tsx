@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeft, CheckCircle2, PackagePlus, ChevronDown } from "lucide-react";
 import { useCatalog } from "@/store/catalog";
-import { CATEGORIES, BRANDS } from "@/data/catalog";
+import { CATEGORIES, BRANDS, INDUSTRIES, categoriesByIndustry } from "@/data/catalog";
 import { ProductMedia } from "@/components/ProductMedia";
 import { formatCAD } from "@/lib/pricing";
 
@@ -97,7 +97,13 @@ export default function NewProductPage() {
             </Field>
             <Field label="Category">
               <Select value={f.categoryId} onChange={(v) => set("categoryId", v)}>
-                {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {INDUSTRIES.map((ind) => (
+                  <optgroup key={ind.id} label={ind.name}>
+                    {categoriesByIndustry(ind.id).map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </optgroup>
+                ))}
               </Select>
             </Field>
           </div>

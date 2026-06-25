@@ -1,7 +1,23 @@
+export type IndustryId = "dental" | "medical" | "veterinary";
+
+export type Industry = {
+  id: IndustryId;
+  name: string;
+  /** short word e.g. "Dental" */
+  label: string;
+  tagline: string;
+  blurb: string;
+  /** lucide icon key */
+  icon: string;
+  /** hero/section photo url */
+  image: string;
+};
+
 export type Category = {
   id: string;
   name: string;
   slug: string;
+  industry: IndustryId;
   /** lucide icon key, resolved in CategoryIcon */
   icon: string;
   blurb: string;
@@ -13,6 +29,7 @@ export type Product = {
   name: string;
   slug: string;
   categoryId: string;
+  industryId: IndustryId;
   brand: string;
   /** list price (MRP) in CAD */
   mrp: number;

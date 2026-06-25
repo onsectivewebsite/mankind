@@ -10,10 +10,10 @@ import {
   Check,
   PackageX,
 } from "lucide-react";
-import { CATEGORIES, BRANDS, categoryById } from "@/data/catalog";
+import { CATEGORIES, BRANDS, categoryById, INDUSTRIES, industryById, categoriesByIndustry } from "@/data/catalog";
 import { usePricedProducts } from "@/store/hooks";
 import { ProductCard } from "@/components/ProductCard";
-import type { PricedProduct } from "@/lib/types";
+import type { PricedProduct, IndustryId } from "@/lib/types";
 
 const PAGE_SIZE = 24;
 const SORTS = [
@@ -39,6 +39,7 @@ export function ProductsBrowser() {
   const all = usePricedProducts();
 
   const q = sp.get("q") ?? "";
+  const industry = sp.get("industry") ?? "";
   const category = sp.get("category") ?? "";
   const brand = sp.get("brand") ?? "";
   const band = sp.get("price") ?? "all";
@@ -62,6 +63,7 @@ export function ProductsBrowser() {
     const term = q.trim().toLowerCase();
     const pb = PRICE_BANDS.find((b) => b.id === band) ?? PRICE_BANDS[0];
     let list = all.filter((p) => {
+      if (industry && p.industryId !== industry) return false;
       if (category && p.categoryId !== category) return false;
       if (brand && p.brand !== brand) return false;
       if (inStock && p.stock <= 0) return false;
@@ -83,17 +85,42 @@ export function ProductsBrowser() {
     };
     if (sort !== "relevance") list = [...list].sort(sorters[sort] ?? (() => 0));
     return list;
-  }, [all, q, category, brand, band, inStock, sort]);
+  }, [all, q, industry, category, brand, band, inStock, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const activeCat = category ? categoryById(category) : null;
-  const hasFilters = Boolean(category || brand || (band && band !== "all") || inStock || q);
+  const activeIndustry = industry ? industryById(industry) : null;
+  const hasFilters = Boolean(industry || category || brand || (band && band !== "all") || inStock || q);
+  const categoryList = industry ? categoriesByIndustry(industry as IndustryId) : CATEGORIES;
 
   const FilterPanel = (
     <div className="space-y-6">
+      {/* industry */}
+      <FilterGroup title="Industry">
+        <button
+          onClick={() => setParam({ industry: null, category: null })}
+          className={`filter-row ${!industry ? "filter-row-active" : ""}`}
+        >
+          All industries {!industry ? <Check className="h-4 w-4" /> : null}
+        </button>
+        {INDUSTRIES.map((ind) => (
+          <button
+            key={ind.id}
+            onClick={() => setParam({ industry: ind.id, category: null })}
+            className={`filter-row ${industry === ind.id ? "filter-row-active" : ""}`}
+          >
+            <span className="flex items-center gap-2">
+              <span className={`h-2 w-2 rounded-full ${ind.id === "dental" ? "bg-[#7c3aed]" : ind.id === "medical" ? "bg-[#2563eb]" : "bg-[#0d9488]"}`} />
+              {ind.name}
+            </span>
+            {industry === ind.id ? <Check className="h-4 w-4 shrink-0" /> : null}
+          </button>
+        ))}
+      </FilterGroup>
+
       {/* category */}
       <FilterGroup title="Category">
         <button
@@ -103,10 +130,10 @@ export function ProductsBrowser() {
           All categories
           {!category ? <Check className="h-4 w-4" /> : null}
         </button>
-        {CATEGORIES.map((c) => (
+        {categoryList.map((c) => (
           <button
             key={c.id}
-            onClick={() => setParam({ category: c.id })}
+            onClick={() => setParam({ category: c.id, industry: c.industry })}
             className={`filter-row ${category === c.id ? "filter-row-active" : ""}`}
           >
             <span className="truncate">{c.name}</span>
@@ -163,8 +190,11 @@ export function ProductsBrowser() {
     <div className="container-page py-8">
       {/* header */}
       <div className="mb-6">
+        {activeIndustry && !activeCat ? (
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-gradient">{activeIndustry.tagline}</p>
+        ) : null}
         <h1 className="text-2xl font-bold text-ink md:text-3xl">
-          {activeCat ? activeCat.name : brand ? `${brand} products` : q ? `Search results` : "All products"}
+          {activeCat ? activeCat.name : activeIndustry ? `${activeIndustry.name} supplies` : brand ? `${brand} products` : q ? `Search results` : "All products"}
         </h1>
         <p className="mt-1 text-sm text-ink-3">
           {q ? <>Showing matches for <span className="font-semibold text-ink-2">“{q}”</span> · </> : null}
@@ -176,6 +206,7 @@ export function ProductsBrowser() {
       {hasFilters ? (
         <div className="mb-5 flex flex-wrap items-center gap-2">
           {q ? <Chip label={`“${q}”`} onClear={() => setParam({ q: null })} /> : null}
+          {activeIndustry ? <Chip label={activeIndustry.name} onClear={() => setParam({ industry: null })} /> : null}
           {activeCat ? <Chip label={activeCat.name} onClear={() => setParam({ category: null })} /> : null}
           {brand ? <Chip label={brand} onClear={() => setParam({ brand: null })} /> : null}
           {band !== "all" ? <Chip label={PRICE_BANDS.find((b) => b.id === band)?.label ?? band} onClear={() => setParam({ price: null })} /> : null}
