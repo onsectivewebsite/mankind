@@ -12,9 +12,9 @@ import { CategoryIcon } from "./CategoryIcon";
 import type { IndustryId } from "@/lib/types";
 
 const INDUSTRY_COLOR: Record<IndustryId, { text: string; soft: string; dot: string }> = {
-  dental: { text: "text-[#5b21b6]", soft: "bg-[#ede9fe]", dot: "bg-[#5b21b6]" },
-  medical: { text: "text-[#1e40af]", soft: "bg-[#dbeafe]", dot: "bg-[#1e40af]" },
-  veterinary: { text: "text-[#047857]", soft: "bg-[#d1fae5]", dot: "bg-[#047857]" },
+  dental: { text: "text-[#0f6f73]", soft: "bg-[#d9eded]", dot: "bg-[#0f6f73]" },
+  medical: { text: "text-[#2f7fb0]", soft: "bg-[#e2f1fa]", dot: "bg-[#3b9fd6]" },
+  veterinary: { text: "text-[#2e9e7b]", soft: "bg-[#dcf3ea]", dot: "bg-[#2e9e7b]" },
 };
 
 function Brand() {
@@ -169,7 +169,7 @@ export function Header() {
           <ShoppingCart className="h-5 w-5" />
           <span className="hidden sm:inline">Cart</span>
           {count > 0 ? (
-            <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold text-white tnum ring-2 ring-white">
+            <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[11px] font-bold text-[color:var(--color-on-gold)] tnum ring-2 ring-white">
               {count}
             </span>
           ) : null}

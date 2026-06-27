@@ -71,7 +71,7 @@ export default function OffersAdminPage() {
           ) : (
             offers.map((o) => (
               <div key={o.id} className={`card flex flex-wrap items-center gap-4 p-4 ${o.active ? "" : "opacity-70"}`}>
-                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white ${o.active ? "bg-accent" : "bg-ink-3"}`}>
+                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white ${o.active ? "bg-primary" : "bg-ink-3"}`}>
                   <span className="text-sm font-extrabold tnum">{o.percent}%</span>
                 </span>
                 <div className="min-w-0 flex-1">

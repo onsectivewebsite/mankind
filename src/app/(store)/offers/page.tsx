@@ -26,13 +26,13 @@ export default function OffersPage() {
     <div className="animate-fade-up">
       <section className="border-b border-line bg-section">
         <div className="container-page py-12 text-center">
-          <span className="chip mx-auto mb-4 w-fit bg-white text-accent shadow-sm">
-            <BadgePercent className="h-4 w-4" /> Limited-time savings
+          <span className="chip mx-auto mb-4 w-fit border border-line bg-white text-primary shadow-sm">
+            <BadgePercent className="h-4 w-4 text-gold" /> Limited-time savings
           </span>
           <h1 className="text-3xl font-extrabold text-ink md:text-4xl">Current offers & deals</h1>
           <p className="mx-auto mt-3 max-w-xl text-ink-2">
-            Save across our dental catalogue. Apply the codes below at checkout — discounts are
-            already reflected in product prices.
+            Save across our dental, medical &amp; veterinary catalogue. Apply the codes below at
+            checkout — discounts are already reflected in product prices.
           </p>
         </div>
       </section>
@@ -44,7 +44,7 @@ export default function OffersPage() {
               <div key={o.id} className="card relative overflow-hidden p-6">
                 <div className="absolute right-0 top-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-primary-soft" />
                 <div className="relative">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-white">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold text-[color:var(--color-on-gold)]">
                     <Tag className="h-5 w-5" />
                   </span>
                   <p className="mt-4 text-3xl font-extrabold text-ink">{o.percent}% OFF</p>
@@ -56,7 +56,7 @@ export default function OffersPage() {
                       <CopyButton code={o.code} />
                     </div>
                   ) : (
-                    <p className="mt-4 text-sm font-medium text-accent">Auto-applied · no code needed</p>
+                    <p className="mt-4 text-sm font-medium text-primary">Auto-applied · no code needed</p>
                   )}
                 </div>
               </div>

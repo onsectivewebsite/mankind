@@ -14,9 +14,9 @@ import { Reveal, Marquee, CountUp } from "@/components/motion";
 import type { IndustryId } from "@/lib/types";
 
 const THEME: Record<IndustryId, { hex: string; soft: string }> = {
-  dental: { hex: "#5b21b6", soft: "#ede9fe" },
-  medical: { hex: "#1e40af", soft: "#dbeafe" },
-  veterinary: { hex: "#047857", soft: "#d1fae5" },
+  dental: { hex: "#0f6f73", soft: "#d9eded" },
+  medical: { hex: "#2f7fb0", soft: "#e2f1fa" },
+  veterinary: { hex: "#2e9e7b", soft: "#dcf3ea" },
 };
 
 function SectionHead({ eyebrow, title, href, hrefLabel = "View all", center = false }: {
@@ -233,7 +233,7 @@ export default function HomePage() {
       {offers.length ? (
         <section className="container-page pb-16">
           <Reveal>
-            <div className="animate-gradient overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-accent to-gold px-6 py-9 md:px-12">
+            <div className="animate-gradient overflow-hidden rounded-3xl bg-gradient-to-r from-primary via-[#0d5a5e] to-[#2e9e7b] px-6 py-9 md:px-12">
               <div className="grid items-center gap-4 md:grid-cols-[1fr_auto]">
                 <div className="text-white">
                   <p className="mb-1 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/90">

@@ -109,7 +109,7 @@ export default function ProductDetailPage() {
             <span className="text-sm text-ink-3">per {product.unit}</span>
           </div>
           {product.appliedOffer ? (
-            <p className="mt-2 inline-flex items-center gap-2 rounded-lg bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent">
+            <p className="mt-2 inline-flex items-center gap-2 rounded-lg bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">
               <Tag className="h-4 w-4" /> {product.appliedOffer.title}
               {product.appliedOffer.code ? <span className="font-mono font-bold">· {product.appliedOffer.code}</span> : null}
             </p>

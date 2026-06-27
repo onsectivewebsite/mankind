@@ -39,7 +39,7 @@ export function ProductCard({ product }: { product: PricedProduct }) {
           {product.discountPercent > 0 ? <DiscountBadge percent={product.discountPercent} /> : null}
           {product.isNew ? <span className="chip bg-primary text-white">New</span> : null}
           {product.bestSeller ? (
-            <span className="chip bg-white text-primary shadow-sm">Bestseller</span>
+            <span className="chip bg-gold text-[color:var(--color-on-gold)] shadow-sm">Bestseller</span>
           ) : null}
         </div>
       </Link>

@@ -56,14 +56,14 @@ export function PriceTag({
 export function DiscountBadge({ percent }: { percent: number }) {
   if (percent <= 0) return null;
   return (
-    <span className="chip bg-accent text-white">-{percent}%</span>
+    <span className="chip bg-accent text-[color:var(--color-on-accent)]">-{percent}%</span>
   );
 }
 
 export function StockPill({ stock }: { stock: number }) {
   if (stock <= 0)
-    return <span className="chip bg-muted text-ink-3">Out of stock</span>;
+    return <span className="chip bg-[#fdecea] text-[#b23b38]">Out of stock</span>;
   if (stock < 10)
     return <span className="chip bg-amber-100 text-amber-800">Low stock · {stock}</span>;
-  return <span className="chip bg-emerald-50 text-emerald-700">In stock</span>;
+  return <span className="chip bg-mint-soft text-[#0e6f57]">In stock</span>;
 }

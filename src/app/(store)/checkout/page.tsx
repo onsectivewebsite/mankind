@@ -72,7 +72,7 @@ export default function CheckoutPage() {
     return (
       <div className="container-page py-20">
         <div className="mx-auto max-w-lg text-center">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50 text-accent">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-mint-soft text-primary">
             <CheckCircle2 className="h-9 w-9" />
           </span>
           <h1 className="mt-5 text-2xl font-bold text-ink md:text-3xl">Order placed — thank you!</h1>

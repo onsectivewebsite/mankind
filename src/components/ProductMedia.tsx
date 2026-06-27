@@ -4,9 +4,9 @@ import type { IndustryId } from "@/lib/types";
 
 /** Vibrant per-industry gradient tints (so cards read by segment at a glance). */
 const TINTS: Record<IndustryId, [string, string, string]> = {
-  dental: ["#f5f3ff", "#ddd6fe", "#5b21b6"],
-  medical: ["#eff6ff", "#c7d7fd", "#1e40af"],
-  veterinary: ["#ecfdf5", "#a7f3d0", "#047857"],
+  dental: ["#ecf6f6", "#bfe3e3", "#0f6f73"],
+  medical: ["#eef6fc", "#bcdcf2", "#2f7fb0"],
+  veterinary: ["#eafaf4", "#b3e6d5", "#2e9e7b"],
 };
 
 export function ProductMedia({

@@ -54,7 +54,7 @@ export default function AdminDashboard() {
       {/* stat cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard icon={Boxes} tint="bg-primary-soft text-primary" label="Total products" value={stats.total.toLocaleString()} />
-        <StatCard icon={Wallet} tint="bg-emerald-50 text-accent" label="Inventory value" value={formatCAD(stats.inventoryValue)} />
+        <StatCard icon={Wallet} tint="bg-mint-soft text-primary" label="Inventory value" value={formatCAD(stats.inventoryValue)} />
         <StatCard icon={BadgePercent} tint="bg-cyan-50 text-cyan-700" label="Active offers" value={String(stats.activeOffers)} />
         <StatCard icon={PackageX} tint="bg-amber-50 text-amber-700" label="Out of stock" value={String(stats.outOfStock)} sub={`${stats.lowStock} low`} />
       </div>

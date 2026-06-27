@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { OfferPopup } from "@/components/OfferPopup";
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         {children}
       </main>
       <Footer />
+      <OfferPopup />
     </>
   );
 }

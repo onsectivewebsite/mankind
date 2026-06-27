@@ -60,7 +60,7 @@ export function ProductsAdmin() {
           <h1 className="text-2xl font-bold text-ink md:text-3xl">Products</h1>
           <p className="text-sm text-ink-3">
             {filtered.length.toLocaleString()} of {products.length.toLocaleString()} products
-            {editedCount ? <span className="ml-1 text-accent">· {editedCount} customised</span> : null}
+            {editedCount ? <span className="ml-1 text-primary">· {editedCount} customised</span> : null}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function ProductsAdmin() {
                     <Link href={`/products/${p.id}`} className="line-clamp-1 text-sm font-semibold text-ink hover:text-primary">{p.name}</Link>
                     <p className="text-xs text-ink-3">
                       <span className="tnum">{p.sku}</span> · {categoryById(p.categoryId)?.name}
-                      {isCustom ? <span className="ml-1 chip bg-primary-soft text-primary !px-1.5 !py-0">custom</span> : isEdited ? <span className="ml-1 text-accent">· edited</span> : null}
+                      {isCustom ? <span className="ml-1 chip bg-primary-soft text-primary !px-1.5 !py-0">custom</span> : isEdited ? <span className="ml-1 text-primary">· edited</span> : null}
                     </p>
                   </div>
                 </div>

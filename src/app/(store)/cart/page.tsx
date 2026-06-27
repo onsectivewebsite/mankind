@@ -123,7 +123,7 @@ export default function CartPage() {
             <dl className="mt-4 space-y-2.5 text-sm">
               <div className="flex justify-between"><dt className="text-ink-3">Subtotal</dt><dd className="font-medium text-ink tnum">{formatCAD(subtotal)}</dd></div>
               {savings > 0 ? (
-                <div className="flex justify-between text-accent"><dt>You save</dt><dd className="font-medium tnum">−{formatCAD(savings)}</dd></div>
+                <div className="flex justify-between text-[#0e6f57]"><dt>You save</dt><dd className="font-medium tnum">−{formatCAD(savings)}</dd></div>
               ) : null}
               <div className="flex justify-between"><dt className="text-ink-3">Shipping</dt><dd className="font-medium text-ink tnum">{shipping === 0 ? "Free" : formatCAD(shipping)}</dd></div>
               <div className="my-2 border-t border-line" />

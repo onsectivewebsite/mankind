@@ -113,7 +113,7 @@ export function ProductsBrowser() {
             className={`filter-row ${industry === ind.id ? "filter-row-active" : ""}`}
           >
             <span className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${ind.id === "dental" ? "bg-[#5b21b6]" : ind.id === "medical" ? "bg-[#1e40af]" : "bg-[#047857]"}`} />
+              <span className={`h-2 w-2 rounded-full ${ind.id === "dental" ? "bg-[#0f6f73]" : ind.id === "medical" ? "bg-[#3b9fd6]" : "bg-[#2e9e7b]"}`} />
               {ind.name}
             </span>
             {industry === ind.id ? <Check className="h-4 w-4 shrink-0" /> : null}
