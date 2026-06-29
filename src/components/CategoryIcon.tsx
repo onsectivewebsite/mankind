@@ -3,6 +3,7 @@ import {
   Fingerprint, Sparkles, Scissors, Anchor, Sun, Box, CircleDot, HardHat,
   Stethoscope, Syringe, Bandage, Accessibility, Wind, Siren, Bone, Droplets,
   FlaskConical, Activity, Bath, Pill, Tractor, PawPrint, HeartPulse, Smile, Gauge,
+  Zap, AudioLines, Dumbbell, Snowflake, Bed, Waves, Hand,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,6 +41,13 @@ const MAP: Record<string, LucideIcon> = {
   "heart-pulse": HeartPulse,
   smile: Smile,
   gauge: Gauge,
+  zap: Zap,
+  "audio-waveform": AudioLines,
+  dumbbell: Dumbbell,
+  snowflake: Snowflake,
+  bed: Bed,
+  waves: Waves,
+  hand: Hand,
 };
 
 export function CategoryIcon({ name, className }: { name: string; className?: string }) {

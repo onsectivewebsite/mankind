@@ -7,6 +7,7 @@ const TINTS: Record<IndustryId, [string, string, string]> = {
   dental: ["#ecf6f6", "#bfe3e3", "#0f6f73"],
   medical: ["#eef6fc", "#bcdcf2", "#2f7fb0"],
   veterinary: ["#eafaf4", "#b3e6d5", "#2e9e7b"],
+  physiotherapy: ["#f4f1fd", "#d9cdf6", "#6d4bc7"],
 };
 
 export function ProductMedia({

@@ -83,7 +83,7 @@ export function OfferPopup() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="offer-flyer-title"
-        className="animate-pop relative grid w-full max-w-3xl overflow-hidden rounded-3xl bg-surface shadow-[var(--shadow-lift)] md:grid-cols-2"
+        className="animate-pop relative grid max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-surface shadow-[var(--shadow-lift)] md:grid-cols-2"
       >
         <button
           ref={closeRef}
@@ -100,7 +100,7 @@ export function OfferPopup() {
           <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/35 to-transparent" />
           <div className="absolute bottom-5 left-5 right-5 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">Mankind Healthcare</p>
-            <p className="font-display text-lg font-bold leading-tight">Dental · Medical · Veterinary supplies</p>
+            <p className="font-display text-lg font-bold leading-tight">Dental · Medical · Veterinary · Physio</p>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export function OfferPopup() {
           </h2>
           <p className="mt-1.5 text-sm text-ink-2">
             Save on {scopeLabel(offer)} — discount already reflected in prices across our
-            dental, medical &amp; veterinary range.
+            dental, medical, veterinary &amp; physiotherapy range.
           </p>
 
           {offer.code ? (

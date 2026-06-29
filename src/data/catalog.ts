@@ -32,6 +32,15 @@ export const INDUSTRIES: Industry[] = [
     icon: "paw-print",
     image: INDUSTRY_PHOTO.veterinary,
   },
+  {
+    id: "physiotherapy",
+    name: "Physiotherapy",
+    label: "Physio",
+    tagline: "Rehab & recovery",
+    blurb: "Electrotherapy, therapeutic ultrasound, shockwave, treatment tables, supports and rehab tools for physiotherapy and recovery clinics.",
+    icon: "activity",
+    image: INDUSTRY_PHOTO.physiotherapy,
+  },
 ];
 
 export const industryById = (id: string) => INDUSTRIES.find((i) => i.id === id);
@@ -71,6 +80,9 @@ export const CATEGORIES: Category[] = [
   { id: "med-infusion", name: "IV & Infusion", slug: "infusion", industry: "medical", icon: "droplets", blurb: "IV cannulas, sets & infusion" },
   { id: "med-lab", name: "Lab & Diagnostics", slug: "lab-diagnostics", industry: "medical", icon: "flask-conical", blurb: "Test strips, tubes & analyzers" },
   { id: "med-sterilization", name: "Sterilization", slug: "medical-sterilization", industry: "medical", icon: "shield-check", blurb: "Autoclaves, pouches & indicators" },
+  { id: "med-aesthetic", name: "Aesthetic Supplies", slug: "aesthetic", industry: "medical", icon: "sparkles", blurb: "Cannulas, fillers, microneedling & PRP" },
+  { id: "med-nursing", name: "Nursing & Patient Care", slug: "nursing", industry: "medical", icon: "bed", blurb: "Gowns, bed pans, pads & home care" },
+  { id: "med-cardiology", name: "Cardiology", slug: "cardiology", industry: "medical", icon: "heart-pulse", blurb: "ECG, electrodes, monitoring & leads" },
 
   // ---- Veterinary ----
   { id: "vet-instruments", name: "Veterinary Instruments", slug: "vet-instruments", industry: "veterinary", icon: "tool", blurb: "Surgical kits, forceps & scissors" },
@@ -83,6 +95,16 @@ export const CATEGORIES: Category[] = [
   { id: "vet-pharmacy", name: "Vet Pharmacy Supplies", slug: "vet-pharmacy", industry: "veterinary", icon: "pill", blurb: "Dosing, vials & dispensing" },
   { id: "vet-largeanimal", name: "Large Animal & Livestock", slug: "large-animal", industry: "veterinary", icon: "tractor", blurb: "Equine & livestock essentials" },
   { id: "vet-imaging", name: "Veterinary Imaging", slug: "vet-imaging", industry: "veterinary", icon: "scan", blurb: "Sensors, plates & accessories" },
+
+  // ---- Physiotherapy ----
+  { id: "physio-electro", name: "Electrotherapy & TENS", slug: "electrotherapy", industry: "physiotherapy", icon: "zap", blurb: "TENS, EMS, IFT & electrode supplies" },
+  { id: "physio-ultrasound", name: "Ultrasound Therapy", slug: "ultrasound-therapy", industry: "physiotherapy", icon: "audio-waveform", blurb: "Therapeutic ultrasound & combo units" },
+  { id: "physio-exercise", name: "Exercise & Rehab", slug: "exercise-rehab", industry: "physiotherapy", icon: "dumbbell", blurb: "Bands, balls, balance & hand therapy" },
+  { id: "physio-hotcold", name: "Hot & Cold Therapy", slug: "hot-cold", industry: "physiotherapy", icon: "snowflake", blurb: "Hot packs, cold packs & paraffin" },
+  { id: "physio-tables", name: "Treatment Tables", slug: "treatment-tables", industry: "physiotherapy", icon: "bed", blurb: "Plinths, traction & massage tables" },
+  { id: "physio-shockwave", name: "Laser & Shockwave", slug: "laser-shockwave", industry: "physiotherapy", icon: "waves", blurb: "Shockwave & laser therapy systems" },
+  { id: "physio-supports", name: "Supports & Bracing", slug: "supports-bracing", industry: "physiotherapy", icon: "bandage", blurb: "Braces, taping & compression" },
+  { id: "physio-massage", name: "Massage & Manual", slug: "massage-manual", industry: "physiotherapy", icon: "hand", blurb: "Massage guns, rollers & cupping" },
 ];
 
 export const BRANDS = [
@@ -100,6 +122,11 @@ export const BRANDS = [
   "PawCare",
   "FlexiCore",
   "ProClinic",
+  "PureCare",
+  "RehabPro",
+  "Flight Dental",
+  "Zolar",
+  "AMD Iconic",
 ] as const;
 
 /* ============================================================
@@ -113,6 +140,8 @@ type Blueprint = {
   bases: string[];
   variants: string[];
   specKeys: [string, string][];
+  /** force a specific brand for this blueprint (e.g. Zolar lasers) */
+  brand?: string;
 };
 
 const DENTAL: Blueprint[] = [
@@ -276,7 +305,88 @@ const VETERINARY: Blueprint[] = [
     specKeys: [["Resolution", "High"], ["Connection", "USB|Wireless"], ["Use", "Veterinary imaging"]] },
 ];
 
-const BLUEPRINTS: Blueprint[] = [...DENTAL, ...MEDICAL, ...VETERINARY];
+/* ----- Dental: more instruments + Flight Dental equipment + Zolar lasers ----- */
+const DENTAL_PLUS: Blueprint[] = [
+  { cat: "instruments", industry: "dental", unit: "each", priceRange: [9, 129],
+    bases: ["Bone Curette", "Periotome", "Luxator", "Surgical Elevator", "Dental Chisel", "Hemostat Forceps", "Needle Holder", "Tissue Scissors", "Crown Scissors", "Bone Rongeur", "Bone File", "Root Elevator", "Apical Elevator", "Gingival Cord Packer"],
+    variants: ["Standard", "Angled", "Straight", "Micro", "Serrated", "Ergo Grip", "Titanium", "Mini", "Anterior", "Posterior"],
+    specKeys: [["Material", "Surgical Steel|Titanium"], ["Finish", "Satin|Mirror"], ["Sterilizable", "Yes, autoclavable 134°C"]] },
+  { cat: "equipment", industry: "dental", unit: "each", priceRange: [299, 14900], brand: "Flight Dental",
+    bases: ["A6 Radius Patient Chair", "A12 Operatory System", "IRIS LED Operatory Light", "Ambidextrous Delivery Unit", "Doctor Stool", "Assistant Stool", "WhiCam Intraoral Camera", "Operatory Cuspidor", "Continental Delivery System", "Radius Hydraulic Chair"],
+    variants: ["Standard", "Deluxe", "Left-Hand", "Right-Hand", "LED", "Premium", "Hybrid", "Compact"],
+    specKeys: [["Warranty", "2 Years|3 Years"], ["Mount", "Chair-mounted|Cart"], ["Power", "Electric|Hydraulic"]] },
+  { cat: "equipment", industry: "dental", unit: "each", priceRange: [49, 6900], brand: "Zolar",
+    bases: ["Photon 3W Diode Laser", "Photon Plus 10W Diode Laser", "Photon EXE Diode Laser", "Photon EXE Plus Diode Laser", "Laser Whitening System", "Disposable Laser Tips", "Laser Safety Glasses", "Laser Handpiece Kit"],
+    variants: ["810nm", "980nm", "Starter Kit", "Pro Kit", "Refill", "Standard", "Portable"],
+    specKeys: [["Wavelength", "810nm|980nm"], ["Presets", "20+|25+"], ["Use", "Soft-tissue surgery"]] },
+];
+
+/* ----- Veterinary: Zolar PawLaze lasers ----- */
+const VET_PLUS: Blueprint[] = [
+  { cat: "vet-surgical", industry: "veterinary", unit: "each", priceRange: [39, 5900], brand: "Zolar",
+    bases: ["PawLaze Veterinary Diode Laser", "PawLaze Therapy Laser", "Vet Laser Disposable Tips", "Vet Laser Safety Glasses", "Surgical Laser Handpiece", "Therapy Laser Applicator"],
+    variants: ["Canine", "Feline", "Equine", "Therapy", "Surgical", "Kit", "Refill"],
+    specKeys: [["Wavelength", "810nm|980nm"], ["Use", "Surgery|Therapy"], ["Species", "Companion|Equine"]] },
+];
+
+/* ----- Medical: AMD Iconic-style aesthetic, nursing, cardiology ----- */
+const MEDICAL_PLUS: Blueprint[] = [
+  { cat: "med-aesthetic", industry: "medical", unit: "box", priceRange: [12, 299],
+    bases: ["Dermal Filler Cannula", "Mesotherapy Needles", "Microneedling Pen", "Aesthetic Marking Pen", "Hyaluron Pen", "Topical Numbing Cream", "Cooling Roller", "PRP Tubes", "Micro-Cannula", "Aesthetic Gauze"],
+    variants: ["25G", "27G", "30G", "Fine", "Standard", "10/box", "50/box", "Sterile", "Refill", "Kit"],
+    specKeys: [["Gauge", "25G|27G|30G"], ["Sterile", "Yes"], ["Use", "Aesthetic / cosmetic"]] },
+  { cat: "med-nursing", industry: "medical", unit: "pack", priceRange: [6, 149],
+    bases: ["Patient Gown", "Bed Pan", "Incontinence Pads", "Wash Basin", "Patient Transfer Sheet", "Nursing Apron", "Pill Organizer", "Urinal Bottle", "Disposable Bed Sheet", "Slide Sheet"],
+    variants: ["Small", "Medium", "Large", "Adult", "Bariatric", "10/pack", "Disposable", "Reusable", "Blue", "White"],
+    specKeys: [["Size", "S|M|L"], ["Use", "Single-use|Reusable"], ["Material", "Nonwoven|PE"]] },
+  { cat: "med-cardiology", industry: "medical", unit: "box", priceRange: [9, 1299],
+    bases: ["ECG Electrodes", "Holter Monitor", "ECG Paper Roll", "Defibrillator Pads", "ECG Lead Wires", "Cardiac Stethoscope", "Stress Test Electrodes", "Telemetry Pouch", "12-Lead ECG Cable", "Pulse Oximeter Sensor"],
+    variants: ["Adult", "Pediatric", "Pre-Gelled", "50/box", "100/box", "Reusable", "Disposable", "Universal", "Snap", "Tab"],
+    specKeys: [["Type", "Disposable|Reusable"], ["Compatibility", "Universal"], ["Quantity", "50/box|100/box"]] },
+];
+
+/* ----- Physiotherapy (PureCare-style modalities & rehab) ----- */
+const PHYSIO: Blueprint[] = [
+  { cat: "physio-electro", industry: "physiotherapy", unit: "each", priceRange: [9, 899],
+    bases: ["TENS Unit", "EMS Muscle Stimulator", "Interferential Therapy Unit", "Combination Therapy Unit", "Self-Adhesive Electrode Pads", "Lead Wires", "Conductive Gel", "Russian Stim Unit", "Microcurrent Device", "NMES Stimulator"],
+    variants: ["Dual-Channel", "4-Channel", "Portable", "Clinical", "5x5cm", "Refill", "Rechargeable", "Digital", "Pack of 4", "Kit"],
+    specKeys: [["Channels", "2|4"], ["Power", "Battery|Mains"], ["Use", "Pain relief / rehab"]] },
+  { cat: "physio-ultrasound", industry: "physiotherapy", unit: "each", priceRange: [12, 1499],
+    bases: ["Therapeutic Ultrasound Unit", "Ultrasound Transducer", "Ultrasound Gel", "Combo Ultrasound / Stim Unit", "Sound Head Applicator", "Coupling Pad"],
+    variants: ["1MHz", "3MHz", "1 & 3MHz", "5cm²", "1cm²", "5L", "Clinical", "Portable", "Refill", "Kit"],
+    specKeys: [["Frequency", "1MHz|3MHz"], ["Head", "1cm²|5cm²"], ["Use", "Deep tissue therapy"]] },
+  { cat: "physio-exercise", industry: "physiotherapy", unit: "set", priceRange: [6, 249],
+    bases: ["Resistance Band Set", "Exercise Ball", "Balance Board", "Wobble Cushion", "Hand Therapy Putty", "Overhead Pulley System", "Shoulder Wheel", "Pedal Exerciser", "Resistance Tubing", "Stability Trainer"],
+    variants: ["Light", "Medium", "Heavy", "55cm", "65cm", "75cm", "Set of 5", "Soft", "Firm", "Pro"],
+    specKeys: [["Resistance", "Light|Medium|Heavy"], ["Material", "Latex-free TPE"], ["Use", "Strength & ROM"]] },
+  { cat: "physio-hotcold", industry: "physiotherapy", unit: "each", priceRange: [5, 699],
+    bases: ["Moist Hot Pack", "Reusable Cold Pack", "Hydrocollator Unit", "Paraffin Bath", "Gel Cold Compress", "Cryotherapy Cuff", "Reusable Ice Wrap", "Heat Therapy Wrap"],
+    variants: ["Standard", "Cervical", "Knee", "Shoulder", "Back", "Oversize", "Refill", "Clinical", "6-Pack", "Kit"],
+    specKeys: [["Type", "Hot|Cold"], ["Reusable", "Yes"], ["Use", "Thermotherapy"]] },
+  { cat: "physio-tables", industry: "physiotherapy", unit: "each", priceRange: [149, 3900],
+    bases: ["Electric Treatment Table", "Adjustable Plinth", "Tilt Table", "Traction Table", "Massage Table", "Bobath Table", "Hi-Lo Treatment Table", "Treatment Stool"],
+    variants: ["2-Section", "3-Section", "Electric", "Hydraulic", "Portable", "Wide", "Standard", "Deluxe"],
+    specKeys: [["Sections", "2|3|4"], ["Lift", "Electric|Hydraulic"], ["Capacity", "200kg|250kg"]] },
+  { cat: "physio-shockwave", industry: "physiotherapy", unit: "each", priceRange: [199, 6900],
+    bases: ["Radial Shockwave Unit", "Class IV Laser Therapy Unit", "Low-Level Laser Unit", "Shockwave Applicator", "Laser Therapy Probe", "Shockwave Handpiece"],
+    variants: ["Clinical", "Portable", "Pro", "Standard", "Refill", "High-Power", "Compact"],
+    specKeys: [["Type", "Radial|Laser"], ["Class", "IV|IIIb"], ["Use", "Tendon & soft tissue"]] },
+  { cat: "physio-supports", industry: "physiotherapy", unit: "each", priceRange: [6, 199],
+    bases: ["Knee Brace", "Ankle Support", "Lumbar Support", "Wrist Splint", "Cervical Collar", "Kinesiology Tape", "Compression Sleeve", "Walking Boot", "Finger Splint", "Elbow Support"],
+    variants: ["Small", "Medium", "Large", "X-Large", "Hinged", "Neoprene", "Left", "Right", "Universal", "Roll"],
+    specKeys: [["Size", "S|M|L|XL"], ["Material", "Neoprene|Elastic"], ["Support", "Mild|Firm"]] },
+  { cat: "physio-massage", industry: "physiotherapy", unit: "each", priceRange: [9, 449],
+    bases: ["Percussion Massage Gun", "Foam Roller", "Massage Oil", "Trigger Point Tool", "Cupping Therapy Set", "Massage Roller Stick", "Acupressure Mat", "Manual Therapy Wedge"],
+    variants: ["Standard", "Pro", "Mini", "30cm", "45cm", "1L", "Set", "Firm", "Soft", "Kit"],
+    specKeys: [["Use", "Myofascial release"], ["Power", "Cordless|Manual"], ["Material", "EVA|Silicone"]] },
+];
+
+const BLUEPRINTS: Blueprint[] = [
+  ...DENTAL, ...DENTAL_PLUS,
+  ...MEDICAL, ...MEDICAL_PLUS,
+  ...VETERINARY, ...VET_PLUS,
+  ...PHYSIO,
+];
 
 /* ----- deterministic helpers (stable across SSR/CSR) ----- */
 function hash(str: string): number {
@@ -306,7 +416,7 @@ function buildCatalog(): Product[] {
         const seed2 = hash(id + "x");
         const seed3 = hash(id + "y");
 
-        const brand = pick([...BRANDS], seed);
+        const brand = bp.brand ?? pick([...BRANDS], seed);
         const [lo, hi] = bp.priceRange;
         const rawMrp = lo + seed2 * (hi - lo);
         const mrp = round99(rawMrp);

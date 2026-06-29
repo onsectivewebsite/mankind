@@ -12,7 +12,7 @@ export function Footer() {
             { icon: Truck, title: "Fast Dispatch", text: "Canada-wide delivery" },
             { icon: ShieldCheck, title: "Certified Supply", text: "Clinic-grade quality" },
             { icon: CreditCard, title: "Trade Pricing", text: "Bulk & contract rates" },
-            { icon: Headset, title: "Expert Support", text: "Across all 3 fields" },
+            { icon: Headset, title: "Expert Support", text: "Across all 4 fields" },
           ].map((f) => (
             <div key={f.title} className="flex items-start gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-gold">
@@ -27,8 +27,8 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container-page grid grid-cols-2 gap-8 py-12 md:grid-cols-12">
-        <div className="col-span-2 md:col-span-3">
+      <div className="container-page py-12">
+        <div className="mb-10 max-w-lg">
           <div className="mb-3 flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-white">
               <ShieldCheck className="h-5 w-5" />
@@ -37,14 +37,16 @@ export function Footer() {
           </div>
           <p className="text-sm text-slate-400">
             Your one-stop supplier across <span className="text-white">Dental</span>,{" "}
-            <span className="text-white">Medical</span> and{" "}
-            <span className="text-white">Veterinary</span> — everything from chairside
-            consumables to complete operatory and clinic equipment.
+            <span className="text-white">Medical</span>,{" "}
+            <span className="text-white">Veterinary</span> and{" "}
+            <span className="text-white">Physiotherapy</span> — everything from chairside
+            consumables to complete clinic equipment.
           </p>
         </div>
 
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
         {INDUSTRIES.map((ind) => (
-          <div key={ind.id} className="md:col-span-2">
+          <div key={ind.id}>
             <h3 className="mb-3 font-display text-sm font-semibold text-white">{ind.name}</h3>
             <ul className="space-y-2 text-sm">
               {categoriesByIndustry(ind.id).slice(0, 5).map((c) => (
@@ -63,7 +65,7 @@ export function Footer() {
           </div>
         ))}
 
-        <div className="col-span-2 md:col-span-3">
+        <div>
           <h3 className="mb-3 font-display text-sm font-semibold text-white">Get in touch</h3>
           <ul className="space-y-3 text-sm">
             <li>
@@ -83,12 +85,13 @@ export function Footer() {
           </ul>
           <Link href="/products" className="btn btn-gradient mt-4 h-10 min-h-0 text-sm">Shop all products</Link>
         </div>
+        </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-xs text-slate-500 md:flex-row">
           <p>© {new Date().getFullYear()} Mankind Healthcare. All rights reserved.</p>
-          <p>Prices in CAD · Serving Dental, Medical & Veterinary professionals</p>
+          <p>Prices in CAD · Serving Dental, Medical, Veterinary &amp; Physiotherapy professionals</p>
         </div>
       </div>
     </footer>

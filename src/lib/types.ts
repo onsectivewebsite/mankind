@@ -1,4 +1,4 @@
-export type IndustryId = "dental" | "medical" | "veterinary";
+export type IndustryId = "dental" | "medical" | "veterinary" | "physiotherapy";
 
 export type Industry = {
   id: IndustryId;

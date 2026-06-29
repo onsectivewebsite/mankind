@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Search, ShoppingCart, Menu, X, Phone, Mail, Truck, ChevronDown, LayoutGrid, Tag,
+  Home, User as UserIcon, LogOut, LayoutDashboard, LogIn,
 } from "lucide-react";
 import { INDUSTRIES, categoriesByIndustry, PRODUCT_COUNT } from "@/data/catalog";
 import { useCart, cartCount } from "@/store/cart";
+import { useAuth, useCurrentUser } from "@/store/auth";
+import { AuthModal } from "./AuthModal";
 import { CategoryIcon } from "./CategoryIcon";
 import type { IndustryId } from "@/lib/types";
 
@@ -15,6 +18,7 @@ const INDUSTRY_COLOR: Record<IndustryId, { text: string; soft: string; dot: stri
   dental: { text: "text-[#0f6f73]", soft: "bg-[#d9eded]", dot: "bg-[#0f6f73]" },
   medical: { text: "text-[#2f7fb0]", soft: "bg-[#e2f1fa]", dot: "bg-[#3b9fd6]" },
   veterinary: { text: "text-[#2e9e7b]", soft: "bg-[#dcf3ea]", dot: "bg-[#2e9e7b]" },
+  physiotherapy: { text: "text-[#6d4bc7]", soft: "bg-[#ece8fb]", dot: "bg-[#7c5cd9]" },
 };
 
 function Brand() {
@@ -54,7 +58,7 @@ function SearchBar({ onSubmit }: { onSubmit?: () => void }) {
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder={`Search ${PRODUCT_COUNT.toLocaleString()}+ dental, medical & veterinary products…`}
+        placeholder={`Search ${PRODUCT_COUNT.toLocaleString()}+ products across dental, medical, vet & physio…`}
         aria-label="Search products"
         className="field pl-10 pr-4"
       />
@@ -69,6 +73,22 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const count = hydrated ? cartCount(lines) : 0;
 
+  const currentUser = useCurrentUser();
+  const logout = useAuth((s) => s.logout);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [acctOpen, setAcctOpen] = useState(false);
+
+  const openAuth = (mode: "login" | "register") => {
+    setAuthMode(mode);
+    setAuthOpen(true);
+    setMobileOpen(false);
+    setAcctOpen(false);
+  };
+  const initials = currentUser
+    ? currentUser.name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase()
+    : "";
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -80,7 +100,7 @@ export function Header() {
       <div className="hidden bg-ink text-white md:block">
         <div className="container-page flex h-9 items-center justify-between text-xs">
           <span className="inline-flex items-center gap-1.5">
-            <Truck className="h-3.5 w-3.5" /> One-stop supplier · Dental · Medical · Veterinary · Free dispatch over $250
+            <Truck className="h-3.5 w-3.5" /> One-stop supplier · Dental · Medical · Veterinary · Physio · Free dispatch over $250
           </span>
           <div className="flex items-center gap-4">
             <a href="tel:+14372682091" className="inline-flex items-center gap-1.5 hover:text-gold">
@@ -111,14 +131,17 @@ export function Header() {
           <SearchBar />
         </div>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+          <Link href="/" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">
+            <Home className="h-4 w-4" /> Home
+          </Link>
           <div className="relative" onMouseEnter={() => setMenuOpen(true)} onMouseLeave={() => setMenuOpen(false)}>
-            <button type="button" className="btn btn-ghost h-11 min-h-0" aria-expanded={menuOpen} onClick={() => setMenuOpen((v) => !v)}>
+            <button type="button" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm" aria-expanded={menuOpen} onClick={() => setMenuOpen((v) => !v)}>
               <LayoutGrid className="h-4 w-4" /> Shop <ChevronDown className="h-4 w-4" />
             </button>
             {menuOpen ? (
-              <div className="absolute right-0 top-full w-[46rem] pt-2">
-                <div className="card grid grid-cols-3 gap-2 p-3">
+              <div className="absolute right-0 top-full w-[60rem] pt-2">
+                <div className="card grid grid-cols-4 gap-2 p-3">
                   {INDUSTRIES.map((ind) => (
                     <div key={ind.id}>
                       <Link
@@ -129,7 +152,7 @@ export function Header() {
                         <span className={`h-2 w-2 rounded-full ${INDUSTRY_COLOR[ind.id].dot}`} /> {ind.name}
                       </Link>
                       <div className="flex flex-col">
-                        {categoriesByIndustry(ind.id).slice(0, 7).map((c) => (
+                        {categoriesByIndustry(ind.id).slice(0, 6).map((c) => (
                           <Link
                             key={c.id}
                             href={`/products?category=${c.id}`}
@@ -155,14 +178,47 @@ export function Header() {
           </div>
 
           {INDUSTRIES.map((ind) => (
-            <Link key={ind.id} href={`/products?industry=${ind.id}`} className="btn btn-ghost h-11 min-h-0">
-              {ind.name}
+            <Link key={ind.id} href={`/products?industry=${ind.id}`} className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">
+              {ind.label}
             </Link>
           ))}
-          <Link href="/offers" className="btn btn-ghost h-11 min-h-0">
+          <Link href="/offers" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">
             <Tag className="h-4 w-4" /> Offers
           </Link>
-          <Link href="/admin" className="btn btn-outline h-11 min-h-0">Admin</Link>
+
+          {/* account */}
+          <div className="relative ml-1" onMouseEnter={() => setAcctOpen(true)} onMouseLeave={() => setAcctOpen(false)}>
+            {currentUser ? (
+              <button onClick={() => setAcctOpen((v) => !v)} className="flex h-10 items-center gap-2 rounded-xl border border-line-strong bg-surface pl-1.5 pr-2.5 hover:border-primary" aria-expanded={acctOpen} aria-label="Account menu">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">{initials}</span>
+                <span className="max-w-[7rem] truncate text-sm font-semibold text-ink-2">{currentUser.name.split(" ")[0]}</span>
+                <ChevronDown className="h-4 w-4 text-ink-3" />
+              </button>
+            ) : (
+              <button onClick={() => openAuth("login")} className="btn btn-outline h-11 min-h-0 px-3 text-sm">
+                <UserIcon className="h-4 w-4" /> Sign in
+              </button>
+            )}
+            {acctOpen && currentUser ? (
+              <div className="absolute right-0 top-full w-60 pt-2">
+                <div className="card overflow-hidden p-1.5">
+                  <div className="border-b border-line px-3 py-2.5">
+                    <p className="truncate text-sm font-semibold text-ink">{currentUser.name}</p>
+                    <p className="truncate text-xs text-ink-3">{currentUser.email}</p>
+                  </div>
+                  <Link href="/cart" onClick={() => setAcctOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-2 hover:bg-muted">
+                    <ShoppingCart className="h-4 w-4" /> My cart
+                  </Link>
+                  <Link href="/admin" onClick={() => setAcctOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-2 hover:bg-muted">
+                    <LayoutDashboard className="h-4 w-4" /> Admin panel
+                  </Link>
+                  <button onClick={() => { logout(); setAcctOpen(false); }} className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[#b23b38] hover:bg-[#fdecea]">
+                    <LogOut className="h-4 w-4" /> Sign out
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
         </nav>
 
         <Link href="/cart" className="btn btn-gradient relative ml-auto h-11 min-h-0 lg:ml-2" aria-label={`Cart, ${count} items`}>
@@ -192,9 +248,30 @@ export function Header() {
                 <X className="h-6 w-6" />
               </button>
             </div>
+            {/* account */}
+            {currentUser ? (
+              <div className="mb-3 flex items-center gap-3 rounded-xl border border-line bg-canvas p-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">{initials}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-ink">{currentUser.name}</p>
+                  <p className="truncate text-xs text-ink-3">{currentUser.email}</p>
+                </div>
+                <button onClick={() => { logout(); }} className="btn btn-ghost h-9 min-h-0 px-2 text-[#b23b38]" aria-label="Sign out">
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="mb-3 grid grid-cols-2 gap-2">
+                <button onClick={() => openAuth("login")} className="btn btn-outline">
+                  <LogIn className="h-4 w-4" /> Sign in
+                </button>
+                <button onClick={() => openAuth("register")} className="btn btn-primary">Create account</button>
+              </div>
+            )}
             <nav className="mb-2 flex flex-col gap-1" aria-label="Mobile">
-              <Link href="/offers" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}>Offers</Link>
-              <Link href="/admin" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}>Admin Panel</Link>
+              <Link href="/" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Home className="h-4 w-4" /> Home</Link>
+              <Link href="/offers" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Tag className="h-4 w-4" /> Offers</Link>
+              <Link href="/admin" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><LayoutDashboard className="h-4 w-4" /> Admin Panel</Link>
             </nav>
             {INDUSTRIES.map((ind) => (
               <div key={ind.id} className="mb-2">
@@ -222,6 +299,8 @@ export function Header() {
           </div>
         </div>
       ) : null}
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} initialMode={authMode} />
     </header>
   );
 }

@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import {
-  ArrowRight, ShieldCheck, Truck, Headset, PackageCheck, Tag, Star, CheckCircle2, Sparkles,
+  ArrowRight, Truck, Tag, Star, CheckCircle2, Sparkles,
+  BadgeCheck, Award, Headphones, Wallet, Boxes,
 } from "lucide-react";
 import { INDUSTRIES, CATEGORIES, PRODUCT_COUNT, BRANDS, categoriesByIndustry } from "@/data/catalog";
 import { usePricedProducts, useOffers } from "@/store/hooks";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Photo } from "@/components/Photo";
+import { PHOTO } from "@/lib/img";
+import { HeroSlider } from "@/components/HeroSlider";
 import { Reveal, Marquee, CountUp } from "@/components/motion";
 import type { IndustryId } from "@/lib/types";
 
@@ -17,6 +20,7 @@ const THEME: Record<IndustryId, { hex: string; soft: string }> = {
   dental: { hex: "#0f6f73", soft: "#d9eded" },
   medical: { hex: "#2f7fb0", soft: "#e2f1fa" },
   veterinary: { hex: "#2e9e7b", soft: "#dcf3ea" },
+  physiotherapy: { hex: "#6d4bc7", soft: "#ece8fb" },
 };
 
 function SectionHead({ eyebrow, title, href, hrefLabel = "View all", center = false }: {
@@ -78,11 +82,11 @@ export default function HomePage() {
               <Sparkles className="h-4 w-4 text-gold" /> One-stop healthcare supplier · Canada
             </span>
             <h1 className="text-4xl font-extrabold leading-[1.04] text-ink md:text-5xl lg:text-[3.5rem]">
-              <span className="text-gradient">Dental, Medical &amp; Veterinary</span> supplies — one trusted source.
+              <span className="text-gradient">Dental, Medical, Veterinary &amp; Physio</span> supplies — one trusted source.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-ink-2">
-              {PRODUCT_COUNT.toLocaleString()}+ clinic-grade products across all three industries.
-              Competitive trade pricing, fast Canada-wide dispatch and specialist support.
+              {PRODUCT_COUNT.toLocaleString()}+ clinic-grade products across dental, medical,
+              veterinary &amp; physiotherapy. Competitive trade pricing, fast dispatch and expert support.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link href="/products" className="btn btn-gradient text-base">
@@ -95,8 +99,8 @@ export default function HomePage() {
             <div className="mt-9 grid max-w-md grid-cols-3 gap-4">
               {[
                 { n: PRODUCT_COUNT, s: "+", l: "Products" },
-                { n: 3, s: "", l: "Industries" },
-                { n: 14, s: "+", l: "Trusted brands" },
+                { n: 4, s: "", l: "Fields covered" },
+                { n: BRANDS.length, s: "+", l: "Trusted brands" },
               ].map((stat) => (
                 <div key={stat.l}>
                   <p className="text-2xl font-extrabold text-ink md:text-3xl">
@@ -108,34 +112,28 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* hero collage */}
-          <div className="relative hidden md:block">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="animate-float space-y-4">
-                <Photo id={INDUSTRIES[0].image} alt="Dental practice" priority overlay className="aspect-[3/4] rounded-2xl shadow-[var(--shadow-lift)]" />
-                <Photo id={INDUSTRIES[2].image} alt="Veterinary care" priority overlay className="aspect-square rounded-2xl shadow-[var(--shadow-lift)]" />
+          {/* hero slider */}
+          <div className="relative">
+            <HeroSlider />
+            <div className="absolute -bottom-5 -left-4 hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-lift)] sm:flex sm:items-center sm:gap-3">
+              <div className="flex items-center gap-1 text-amber-400">
+                {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
               </div>
-              <div className="animate-float-slow space-y-4 pt-10" style={{ animationDelay: "-3s" }}>
-                <Photo id={INDUSTRIES[1].image} alt="Medical clinic" priority overlay className="aspect-square rounded-2xl shadow-[var(--shadow-lift)]" />
-                <div className="card flex flex-col gap-1 p-5">
-                  <div className="flex items-center gap-1 text-amber-400">
-                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-                  </div>
-                  <p className="mt-1 text-sm font-semibold text-ink">Trusted by 2,400+ clinicians</p>
-                  <p className="text-xs text-ink-3">Dental · Medical · Veterinary</p>
-                </div>
+              <div className="leading-tight">
+                <p className="text-sm font-semibold text-ink">Trusted by 2,400+ clinicians</p>
+                <p className="text-xs text-ink-3">Dental · Medical · Veterinary · Physio</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ============ THREE INDUSTRY SEGMENTS ============ */}
+      {/* ============ INDUSTRY SEGMENTS ============ */}
       <section className="container-page py-16">
-        <SectionHead center eyebrow="One supplier, three industries" title="Shop by your field" />
-        <div className="grid gap-5 md:grid-cols-3">
+        <SectionHead center eyebrow="One supplier, four fields" title="Shop by your field" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {INDUSTRIES.map((ind, i) => (
-            <Reveal key={ind.id} delay={i * 120}>
+            <Reveal key={ind.id} delay={i * 100}>
               <Link
                 href={`/products?industry=${ind.id}`}
                 className="group block overflow-hidden rounded-[20px] border border-line bg-surface shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-lift)]"
@@ -171,28 +169,32 @@ export default function HomePage() {
         <div className="container-page">
           <Reveal>
             <div className="mb-10 text-center">
-              <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold">Why Mankind Healthcare</p>
-              <h2 className="text-2xl font-bold md:text-[2rem]">Everything your practice needs, in one order</h2>
+              <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold">Why Choose Mankind Healthcare</p>
+              <h2 className="text-2xl font-bold md:text-[2rem]">One trusted partner for your whole practice</h2>
               <p className="mx-auto mt-3 max-w-2xl text-slate-300">
-                Stop juggling multiple suppliers. From dental chairside to hospital wards to the
-                vet clinic — source it all from one trusted partner.
+                From dental chairside to hospital wards, the vet clinic to the physio studio —
+                source it all from a supplier built around quality, value and service.
               </p>
             </div>
           </Reveal>
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
             {[
-              { icon: PackageCheck, t: "Comprehensive range", d: `${PRODUCT_COUNT.toLocaleString()}+ SKUs across 3 industries` },
-              { icon: Truck, t: "Fast dispatch", d: "Canada-wide, free over $250" },
-              { icon: ShieldCheck, t: "Certified quality", d: "Clinic-grade, compliant supply" },
-              { icon: Headset, t: "Specialist support", d: "Dental, medical & vet experts" },
+              { icon: BadgeCheck, t: "Quality Products", d: "Clinic-grade, compliant supplies you can rely on every day." },
+              { icon: Award, t: "Trusted Brands", d: `${BRANDS.length}+ leading brands — from Flight Dental to Zolar and PureCare.` },
+              { icon: Truck, t: "Fast Delivery", d: "Quick, reliable Canada-wide dispatch — free over $250." },
+              { icon: Headphones, t: "Customer Support", d: "Specialists across dental, medical, veterinary & physio." },
+              { icon: Wallet, t: "Competitive Pricing", d: "Trade, bulk and contract rates that keep costs down." },
+              { icon: Boxes, t: "Wide Product Range", d: `${PRODUCT_COUNT.toLocaleString()}+ products across four healthcare fields.` },
             ].map((f, i) => (
-              <Reveal key={f.t} delay={i * 90}>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white">
-                    <f.icon className="h-5 w-5" />
+              <Reveal key={f.t} delay={(i % 3) * 90}>
+                <div className="group flex h-full items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-colors hover:bg-white/10">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-[#2e9e7b] text-white transition-transform duration-300 group-hover:scale-110">
+                    <f.icon className="h-6 w-6" />
                   </span>
-                  <p className="mt-3 font-display text-base font-bold text-white">{f.t}</p>
-                  <p className="mt-1 text-sm text-slate-300">{f.d}</p>
+                  <div>
+                    <p className="font-display text-base font-bold text-white">{f.t}</p>
+                    <p className="mt-1 text-sm text-slate-300">{f.d}</p>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -200,8 +202,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ CATEGORY SHOWCASE ============ */}
+      {/* ============ SPOTLIGHT ============ */}
       <section className="container-page py-16">
+        <SectionHead eyebrow="What's new" title="Featured this season" />
+        <div className="grid gap-5 lg:grid-cols-3">
+          {[
+            { img: PHOTO.physioA, tag: "New field", title: "Physiotherapy & Rehab", copy: "Electrotherapy, ultrasound, shockwave & treatment tables.", href: "/products?industry=physiotherapy", span: "lg:col-span-2 aspect-[16/10] lg:aspect-[16/8]" },
+            { img: PHOTO.dentalProc, tag: "Equipment", title: "Flight Dental & Zolar lasers", copy: "Operatory chairs, LED lights & soft-tissue diode lasers.", href: "/products?category=equipment", span: "aspect-[16/10]" },
+          ].map((s, i) => (
+            <Reveal key={s.title} delay={i * 120} className={s.span.includes("col-span-2") ? "lg:col-span-2" : ""}>
+              <Link href={s.href} className="group relative block h-full overflow-hidden rounded-3xl shadow-[var(--shadow-soft)]">
+                <Photo id={s.img} alt={s.title} className={`w-full ${s.span} transition-transform duration-700 group-hover:scale-105`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="chip mb-2 w-fit bg-gold text-[color:var(--color-on-gold)]">{s.tag}</span>
+                  <h3 className="font-display text-2xl font-bold text-white">{s.title}</h3>
+                  <p className="mt-1 max-w-md text-sm text-white/85">{s.copy}</p>
+                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-white transition-all group-hover:gap-2">
+                    Explore <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ CATEGORY SHOWCASE ============ */}
+      <section className="bg-section py-16">
+        <div className="container-page">
         <SectionHead eyebrow="Browse departments" title="Popular categories" href="/products" hrefLabel="All categories" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {featuredCats.map((c, i) => {
@@ -226,6 +255,7 @@ export default function HomePage() {
               </Reveal>
             );
           })}
+        </div>
         </div>
       </section>
 
