@@ -35,7 +35,7 @@ export const INDUSTRIES: Industry[] = [
   {
     id: "physiotherapy",
     name: "Physiotherapy",
-    label: "Physio",
+    label: "Physiotherapy",
     tagline: "Rehab & recovery",
     blurb: "Electrotherapy, therapeutic ultrasound, shockwave, treatment tables, supports and rehab tools for physiotherapy and recovery clinics.",
     icon: "activity",
@@ -107,26 +107,12 @@ export const CATEGORIES: Category[] = [
   { id: "physio-massage", name: "Massage & Manual", slug: "massage-manual", industry: "physiotherapy", icon: "hand", blurb: "Massage guns, rollers & cupping" },
 ];
 
+// Own-brand only — MCare product lines (no competitor brand names).
 export const BRANDS = [
-  "MankindPro",
-  "DentMax",
-  "OroTech",
-  "MediCore",
-  "VitaLine",
-  "ClearLine",
-  "ApexMed",
-  "PureSeal",
-  "SteriPro",
-  "NovaDent",
-  "VetEssential",
-  "PawCare",
-  "FlexiCore",
-  "ProClinic",
-  "PureCare",
-  "RehabPro",
-  "Flight Dental",
-  "Zolar",
-  "AMD Iconic",
+  "MCare",
+  "MCare Pro",
+  "MCare Elite",
+  "MCare Select",
 ] as const;
 
 /* ============================================================
@@ -140,7 +126,7 @@ type Blueprint = {
   bases: string[];
   variants: string[];
   specKeys: [string, string][];
-  /** force a specific brand for this blueprint (e.g. Zolar lasers) */
+  /** force a specific MCare line for this blueprint (e.g. lasers → MCare Pro) */
   brand?: string;
 };
 
@@ -305,31 +291,31 @@ const VETERINARY: Blueprint[] = [
     specKeys: [["Resolution", "High"], ["Connection", "USB|Wireless"], ["Use", "Veterinary imaging"]] },
 ];
 
-/* ----- Dental: more instruments + Flight Dental equipment + Zolar lasers ----- */
+/* ----- Dental: more instruments + operatory equipment + diode lasers ----- */
 const DENTAL_PLUS: Blueprint[] = [
   { cat: "instruments", industry: "dental", unit: "each", priceRange: [9, 129],
     bases: ["Bone Curette", "Periotome", "Luxator", "Surgical Elevator", "Dental Chisel", "Hemostat Forceps", "Needle Holder", "Tissue Scissors", "Crown Scissors", "Bone Rongeur", "Bone File", "Root Elevator", "Apical Elevator", "Gingival Cord Packer"],
     variants: ["Standard", "Angled", "Straight", "Micro", "Serrated", "Ergo Grip", "Titanium", "Mini", "Anterior", "Posterior"],
     specKeys: [["Material", "Surgical Steel|Titanium"], ["Finish", "Satin|Mirror"], ["Sterilizable", "Yes, autoclavable 134°C"]] },
-  { cat: "equipment", industry: "dental", unit: "each", priceRange: [299, 14900], brand: "Flight Dental",
-    bases: ["A6 Radius Patient Chair", "A12 Operatory System", "IRIS LED Operatory Light", "Ambidextrous Delivery Unit", "Doctor Stool", "Assistant Stool", "WhiCam Intraoral Camera", "Operatory Cuspidor", "Continental Delivery System", "Radius Hydraulic Chair"],
+  { cat: "equipment", industry: "dental", unit: "each", priceRange: [299, 14900], brand: "MCare Elite",
+    bases: ["Radius Patient Chair", "Operatory Chair System", "LED Operatory Light", "Ambidextrous Delivery Unit", "Doctor Stool", "Assistant Stool", "Wireless Intraoral Camera", "Operatory Cuspidor", "Continental Delivery System", "Hydraulic Patient Chair"],
     variants: ["Standard", "Deluxe", "Left-Hand", "Right-Hand", "LED", "Premium", "Hybrid", "Compact"],
     specKeys: [["Warranty", "2 Years|3 Years"], ["Mount", "Chair-mounted|Cart"], ["Power", "Electric|Hydraulic"]] },
-  { cat: "equipment", industry: "dental", unit: "each", priceRange: [49, 6900], brand: "Zolar",
-    bases: ["Photon 3W Diode Laser", "Photon Plus 10W Diode Laser", "Photon EXE Diode Laser", "Photon EXE Plus Diode Laser", "Laser Whitening System", "Disposable Laser Tips", "Laser Safety Glasses", "Laser Handpiece Kit"],
+  { cat: "equipment", industry: "dental", unit: "each", priceRange: [49, 6900], brand: "MCare Pro",
+    bases: ["3W Soft-Tissue Diode Laser", "10W Diode Laser", "Advanced Diode Laser", "Advanced Diode Laser Plus", "Laser Whitening System", "Disposable Laser Tips", "Laser Safety Glasses", "Laser Handpiece Kit"],
     variants: ["810nm", "980nm", "Starter Kit", "Pro Kit", "Refill", "Standard", "Portable"],
     specKeys: [["Wavelength", "810nm|980nm"], ["Presets", "20+|25+"], ["Use", "Soft-tissue surgery"]] },
 ];
 
-/* ----- Veterinary: Zolar PawLaze lasers ----- */
+/* ----- Veterinary: MCare diode lasers ----- */
 const VET_PLUS: Blueprint[] = [
-  { cat: "vet-surgical", industry: "veterinary", unit: "each", priceRange: [39, 5900], brand: "Zolar",
-    bases: ["PawLaze Veterinary Diode Laser", "PawLaze Therapy Laser", "Vet Laser Disposable Tips", "Vet Laser Safety Glasses", "Surgical Laser Handpiece", "Therapy Laser Applicator"],
+  { cat: "vet-surgical", industry: "veterinary", unit: "each", priceRange: [39, 5900], brand: "MCare Pro",
+    bases: ["Veterinary Diode Laser", "Veterinary Therapy Laser", "Vet Laser Disposable Tips", "Vet Laser Safety Glasses", "Surgical Laser Handpiece", "Therapy Laser Applicator"],
     variants: ["Canine", "Feline", "Equine", "Therapy", "Surgical", "Kit", "Refill"],
     specKeys: [["Wavelength", "810nm|980nm"], ["Use", "Surgery|Therapy"], ["Species", "Companion|Equine"]] },
 ];
 
-/* ----- Medical: AMD Iconic-style aesthetic, nursing, cardiology ----- */
+/* ----- Medical: aesthetic, nursing, cardiology ----- */
 const MEDICAL_PLUS: Blueprint[] = [
   { cat: "med-aesthetic", industry: "medical", unit: "box", priceRange: [12, 299],
     bases: ["Dermal Filler Cannula", "Mesotherapy Needles", "Microneedling Pen", "Aesthetic Marking Pen", "Hyaluron Pen", "Topical Numbing Cream", "Cooling Roller", "PRP Tubes", "Micro-Cannula", "Aesthetic Gauze"],
@@ -345,7 +331,7 @@ const MEDICAL_PLUS: Blueprint[] = [
     specKeys: [["Type", "Disposable|Reusable"], ["Compatibility", "Universal"], ["Quantity", "50/box|100/box"]] },
 ];
 
-/* ----- Physiotherapy (PureCare-style modalities & rehab) ----- */
+/* ----- Physiotherapy modalities & rehab ----- */
 const PHYSIO: Blueprint[] = [
   { cat: "physio-electro", industry: "physiotherapy", unit: "each", priceRange: [9, 899],
     bases: ["TENS Unit", "EMS Muscle Stimulator", "Interferential Therapy Unit", "Combination Therapy Unit", "Self-Adhesive Electrode Pads", "Lead Wires", "Conductive Gel", "Russian Stim Unit", "Microcurrent Device", "NMES Stimulator"],

@@ -11,6 +11,7 @@ import { INDUSTRIES, categoriesByIndustry, PRODUCT_COUNT } from "@/data/catalog"
 import { useCart, cartCount } from "@/store/cart";
 import { useAuth, useCurrentUser } from "@/store/auth";
 import { AuthModal } from "./AuthModal";
+import { SocialLinks } from "./SocialLinks";
 import { CategoryIcon } from "./CategoryIcon";
 import type { IndustryId } from "@/lib/types";
 
@@ -58,7 +59,7 @@ function SearchBar({ onSubmit }: { onSubmit?: () => void }) {
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder={`Search ${PRODUCT_COUNT.toLocaleString()}+ products across dental, medical, vet & physio…`}
+        placeholder={`Search ${PRODUCT_COUNT.toLocaleString()}+ products across dental, medical, veterinary & physiotherapy…`}
         aria-label="Search products"
         className="field pl-10 pr-4"
       />
@@ -100,7 +101,7 @@ export function Header() {
       <div className="hidden bg-ink text-white md:block">
         <div className="container-page flex h-9 items-center justify-between text-xs">
           <span className="inline-flex items-center gap-1.5">
-            <Truck className="h-3.5 w-3.5" /> One-stop supplier · Dental · Medical · Veterinary · Physio · Free dispatch over $250
+            <Truck className="h-3.5 w-3.5" /> One-stop supplier · Dental · Medical · Veterinary · Physiotherapy
           </span>
           <div className="flex items-center gap-4">
             <a href="tel:+14372682091" className="inline-flex items-center gap-1.5 hover:text-gold">
@@ -109,6 +110,8 @@ export function Header() {
             <a href="mailto:info@mankindhealthcare.com" className="inline-flex items-center gap-1.5 hover:text-gold">
               <Mail className="h-3.5 w-3.5" /> info@mankindhealthcare.com
             </a>
+            <span className="h-3.5 w-px bg-white/20" />
+            <SocialLinks iconClass="h-3.5 w-3.5" gap="gap-2.5" linkClass="!text-slate-300" />
           </div>
         </div>
       </div>
@@ -117,7 +120,7 @@ export function Header() {
       <div className="container-page flex h-16 items-center gap-3">
         <button
           type="button"
-          className="btn btn-ghost -ml-2 h-11 w-11 min-h-0 p-0 lg:hidden"
+          className="btn btn-ghost -ml-2 h-11 w-11 min-h-0 p-0 xl:hidden"
           aria-label="Open menu"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen(true)}
@@ -131,7 +134,7 @@ export function Header() {
           <SearchBar />
         </div>
 
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
           <Link href="/" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">
             <Home className="h-4 w-4" /> Home
           </Link>
@@ -185,6 +188,7 @@ export function Header() {
           <Link href="/offers" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">
             <Tag className="h-4 w-4" /> Offers
           </Link>
+          <Link href="/contact" className="btn btn-ghost h-11 min-h-0 px-2.5 text-sm">Contact</Link>
 
           {/* account */}
           <div className="relative ml-1" onMouseEnter={() => setAcctOpen(true)} onMouseLeave={() => setAcctOpen(false)}>
@@ -239,7 +243,7 @@ export function Header() {
 
       {/* mobile drawer */}
       {mobileOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 xl:hidden">
           <div className="absolute inset-0 bg-ink/50" onClick={() => setMobileOpen(false)} aria-hidden="true" />
           <div className="absolute left-0 top-0 h-full w-[88%] max-w-sm overflow-y-auto bg-surface p-4 shadow-xl animate-fade-up">
             <div className="mb-4 flex items-center justify-between">
@@ -271,6 +275,7 @@ export function Header() {
             <nav className="mb-2 flex flex-col gap-1" aria-label="Mobile">
               <Link href="/" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Home className="h-4 w-4" /> Home</Link>
               <Link href="/offers" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Tag className="h-4 w-4" /> Offers</Link>
+              <Link href="/contact" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Mail className="h-4 w-4" /> Contact</Link>
               <Link href="/admin" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><LayoutDashboard className="h-4 w-4" /> Admin Panel</Link>
             </nav>
             {INDUSTRIES.map((ind) => (

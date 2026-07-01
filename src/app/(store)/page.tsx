@@ -6,7 +6,7 @@ import {
   ArrowRight, Truck, Tag, Star, CheckCircle2, Sparkles,
   BadgeCheck, Award, Headphones, Wallet, Boxes,
 } from "lucide-react";
-import { INDUSTRIES, CATEGORIES, PRODUCT_COUNT, BRANDS, categoriesByIndustry } from "@/data/catalog";
+import { INDUSTRIES, CATEGORIES, PRODUCT_COUNT, categoriesByIndustry } from "@/data/catalog";
 import { usePricedProducts, useOffers } from "@/store/hooks";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -82,7 +82,7 @@ export default function HomePage() {
               <Sparkles className="h-4 w-4 text-gold" /> One-stop healthcare supplier · Canada
             </span>
             <h1 className="text-4xl font-extrabold leading-[1.04] text-ink md:text-5xl lg:text-[3.5rem]">
-              <span className="text-gradient">Dental, Medical, Veterinary &amp; Physio</span> supplies — one trusted source.
+              <span className="text-gradient">Dental, Medical, Veterinary &amp; Physiotherapy</span> supplies — one trusted source.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-ink-2">
               {PRODUCT_COUNT.toLocaleString()}+ clinic-grade products across dental, medical,
@@ -100,7 +100,7 @@ export default function HomePage() {
               {[
                 { n: PRODUCT_COUNT, s: "+", l: "Products" },
                 { n: 4, s: "", l: "Fields covered" },
-                { n: BRANDS.length, s: "+", l: "Trusted brands" },
+                { n: CATEGORIES.length, s: "+", l: "Categories" },
               ].map((stat) => (
                 <div key={stat.l}>
                   <p className="text-2xl font-extrabold text-ink md:text-3xl">
@@ -121,7 +121,7 @@ export default function HomePage() {
               </div>
               <div className="leading-tight">
                 <p className="text-sm font-semibold text-ink">Trusted by 2,400+ clinicians</p>
-                <p className="text-xs text-ink-3">Dental · Medical · Veterinary · Physio</p>
+                <p className="text-xs text-ink-3">Dental · Medical · Veterinary · Physiotherapy</p>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
             {[
               { icon: BadgeCheck, t: "Quality Products", d: "Clinic-grade, compliant supplies you can rely on every day." },
-              { icon: Award, t: "Trusted Brands", d: `${BRANDS.length}+ leading brands — from Flight Dental to Zolar and PureCare.` },
+              { icon: Award, t: "Our Own MCare Brand", d: "The MCare range — engineered in-house to clinical standards across every field." },
               { icon: Truck, t: "Fast Delivery", d: "Quick, reliable Canada-wide dispatch — free over $250." },
               { icon: Headphones, t: "Customer Support", d: "Specialists across dental, medical, veterinary & physio." },
               { icon: Wallet, t: "Competitive Pricing", d: "Trade, bulk and contract rates that keep costs down." },
@@ -208,7 +208,7 @@ export default function HomePage() {
         <div className="grid gap-5 lg:grid-cols-3">
           {[
             { img: PHOTO.physioA, tag: "New field", title: "Physiotherapy & Rehab", copy: "Electrotherapy, ultrasound, shockwave & treatment tables.", href: "/products?industry=physiotherapy", span: "lg:col-span-2 aspect-[16/10] lg:aspect-[16/8]" },
-            { img: PHOTO.dentalProc, tag: "Equipment", title: "Flight Dental & Zolar lasers", copy: "Operatory chairs, LED lights & soft-tissue diode lasers.", href: "/products?category=equipment", span: "aspect-[16/10]" },
+            { img: PHOTO.dentalProc, tag: "Equipment", title: "MCare equipment & lasers", copy: "Operatory chairs, LED lights & soft-tissue diode lasers.", href: "/products?category=equipment", span: "aspect-[16/10]" },
           ].map((s, i) => (
             <Reveal key={s.title} delay={i * 120} className={s.span.includes("col-span-2") ? "lg:col-span-2" : ""}>
               <Link href={s.href} className="group relative block h-full overflow-hidden rounded-3xl shadow-[var(--shadow-soft)]">
@@ -305,14 +305,20 @@ export default function HomePage() {
         </section>
       ) : null}
 
-      {/* ============ BRAND MARQUEE ============ */}
+      {/* ============ TRUST MARQUEE ============ */}
       <section className="border-y border-line bg-surface py-10">
         <p className="container-page mb-6 text-center text-xs font-bold uppercase tracking-[0.18em] text-ink-3">
-          Stocking the brands clinics trust
+          The MCare promise
         </p>
         <Marquee>
-          {BRANDS.map((b) => (
-            <span key={b} className="mx-4 font-display text-xl font-extrabold text-ink-3/70">{b}</span>
+          {[
+            "Own-Brand MCare Quality", "Health-Canada Ready", "ISO-Grade Manufacturing",
+            "Fast Canada-Wide Dispatch", "Trade & Bulk Pricing", "Dedicated Clinical Support",
+            "30-Day Easy Returns", "Serving 4 Healthcare Fields",
+          ].map((t) => (
+            <span key={t} className="mx-5 inline-flex items-center gap-2 font-display text-lg font-bold text-ink-3/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold" /> {t}
+            </span>
           ))}
         </Marquee>
       </section>

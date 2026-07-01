@@ -100,7 +100,7 @@ export function OfferPopup() {
           <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/35 to-transparent" />
           <div className="absolute bottom-5 left-5 right-5 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">Mankind Healthcare</p>
-            <p className="font-display text-lg font-bold leading-tight">Dental · Medical · Veterinary · Physio</p>
+            <p className="font-display text-lg font-bold leading-tight">Dental · Medical · Veterinary · Physiotherapy</p>
           </div>
         </div>
 

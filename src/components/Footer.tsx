@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, ShieldCheck, Truck, CreditCard, Headset } from "lucide-react";
 import { INDUSTRIES, categoriesByIndustry } from "@/data/catalog";
+import { SocialLinks } from "./SocialLinks";
 
 export function Footer() {
   return (
@@ -83,15 +84,24 @@ export function Footer() {
               105, Mall Road, Canada
             </li>
           </ul>
-          <Link href="/products" className="btn btn-gradient mt-4 h-10 min-h-0 text-sm">Shop all products</Link>
+          <div className="mt-5">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">Follow us</p>
+            <SocialLinks chip iconClass="h-4 w-4" gap="gap-2" />
+          </div>
+          <Link href="/products" className="btn btn-gradient mt-5 h-10 min-h-0 text-sm">Shop all products</Link>
         </div>
         </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-center justify-between gap-2 py-5 text-xs text-slate-500 md:flex-row">
+        <div className="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs text-slate-500 md:flex-row">
           <p>© {new Date().getFullYear()} Mankind Healthcare. All rights reserved.</p>
-          <p>Prices in CAD · Serving Dental, Medical, Veterinary &amp; Physiotherapy professionals</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <Link href="/contact" className="hover:text-gold">Contact</Link>
+            <Link href="/terms" className="hover:text-gold">Terms &amp; Conditions</Link>
+            <Link href="/offers" className="hover:text-gold">Offers</Link>
+          </div>
+          <p className="text-center md:text-right">Prices in CAD · Serving all four fields</p>
         </div>
       </div>
     </footer>
