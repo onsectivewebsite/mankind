@@ -1,5 +1,6 @@
 import { categoryById } from "@/data/catalog";
 import { CategoryIcon } from "./CategoryIcon";
+import { Photo } from "./Photo";
 import type { IndustryId } from "@/lib/types";
 
 /** Vibrant per-industry gradient tints (so cards read by segment at a glance). */
@@ -13,12 +14,14 @@ const TINTS: Record<IndustryId, [string, string, string]> = {
 export function ProductMedia({
   categoryId,
   brand,
+  image,
   className = "",
   iconClass = "h-12 w-12",
   rounded = "rounded-xl",
 }: {
   categoryId: string;
   brand?: string;
+  image?: string;
   className?: string;
   iconClass?: string;
   rounded?: string;
@@ -26,6 +29,21 @@ export function ProductMedia({
   const cat = categoryById(categoryId);
   const industry = (cat?.industry ?? "dental") as IndustryId;
   const [c1, c2, accent] = TINTS[industry];
+
+  // real product photo (e.g. from an import) takes precedence over the tile
+  if (image) {
+    return (
+      <div className={`relative overflow-hidden bg-white ${rounded} ${className}`}>
+        <Photo src={image} alt={brand ? `${brand} product` : "Product"} className="h-full w-full" />
+        {brand ? (
+          <span className="absolute bottom-2 left-2 rounded-md bg-white/85 px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-ink-2 backdrop-blur-sm">
+            {brand}
+          </span>
+        ) : null}
+      </div>
+    );
+  }
+
   return (
     <div
       className={`group/media relative flex items-center justify-center overflow-hidden ${rounded} ${className}`}

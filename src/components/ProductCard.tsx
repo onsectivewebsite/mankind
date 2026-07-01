@@ -31,6 +31,7 @@ export function ProductCard({ product }: { product: PricedProduct }) {
         <ProductMedia
           categoryId={product.categoryId}
           brand={product.brand}
+          image={product.image}
           className="aspect-[4/3] w-full"
           rounded="rounded-none"
           iconClass="h-11 w-11"

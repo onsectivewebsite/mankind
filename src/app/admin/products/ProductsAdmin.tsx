@@ -123,7 +123,7 @@ export function ProductsAdmin() {
               <div key={p.id} className="grid grid-cols-1 gap-3 px-4 py-3 md:grid-cols-[1fr_8rem_7rem_6rem_3rem] md:items-center">
                 {/* product */}
                 <div className="flex items-center gap-3">
-                  <ProductMedia categoryId={p.categoryId} className="h-12 w-12 shrink-0" iconClass="h-5 w-5" rounded="rounded-lg" />
+                  <ProductMedia categoryId={p.categoryId} image={p.image} className="h-12 w-12 shrink-0" iconClass="h-5 w-5" rounded="rounded-lg" />
                   <div className="min-w-0">
                     <Link href={`/products/${p.id}`} className="line-clamp-1 text-sm font-semibold text-ink hover:text-primary">{p.name}</Link>
                     <p className="text-xs text-ink-3">

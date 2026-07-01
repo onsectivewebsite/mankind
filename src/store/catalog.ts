@@ -14,7 +14,10 @@ type NewProductInput = {
   stock: number;
   unit: string;
   description: string;
+  image?: string;
 };
+
+export type ImportRow = Partial<NewProductInput> & { name?: string; price?: number };
 
 type CatalogState = {
   /** partial edits keyed by product id (price/stock/name/etc.) */
@@ -29,6 +32,7 @@ type CatalogState = {
 
   updateProduct: (id: string, patch: Partial<Product>) => void;
   addProduct: (input: NewProductInput) => Product;
+  importProducts: (rows: NewProductInput[]) => number;
   deleteProduct: (id: string) => void;
   restoreProduct: (id: string) => void;
   resetCatalog: () => void;
@@ -43,6 +47,33 @@ type CatalogState = {
 
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+function buildProduct(input: NewProductInput, seq: number): Product {
+  const sku = `NEW-${String(seq).padStart(5, "0")}`;
+  const brand = input.brand?.trim() || "MCare";
+  return {
+    id: `mkc-${seq}-${Math.round((seq * 2654435761) % 100000)}`,
+    sku,
+    name: input.name,
+    slug: `${slugify(input.name)}-${seq}`,
+    categoryId: input.categoryId,
+    industryId: categoryById(input.categoryId)?.industry ?? "dental",
+    brand,
+    mrp: input.mrp || input.price,
+    price: input.price,
+    unit: input.unit?.trim() || "each",
+    image: input.image?.trim() || undefined,
+    rating: 5,
+    reviews: 0,
+    stock: input.stock ?? 25,
+    tags: ["new"],
+    bestSeller: false,
+    isNew: true,
+    description: input.description?.trim() || `${input.name} supplied by Mankind Healthcare.`,
+    specs: { Brand: brand, SKU: sku },
+    seq: 1_000_000 + seq,
+  };
+}
 
 const DEFAULT_OFFERS: Offer[] = [
   { id: "ofr-welcome", title: "Welcome Offer — 10% off everything", percent: 10, scope: { type: "all" }, active: true, code: "WELCOME10" },
@@ -82,30 +113,18 @@ export const useCatalog = create<CatalogState>()(
 
       addProduct: (input) => {
         const seq = PRODUCTS.length + get().customProducts.length + 1;
-        const id = nextId("mkc");
-        const product: Product = {
-          id,
-          sku: `NEW-${String(seq).padStart(5, "0")}`,
-          name: input.name,
-          slug: `${slugify(input.name)}-${seq}`,
-          categoryId: input.categoryId,
-          industryId: categoryById(input.categoryId)?.industry ?? "dental",
-          brand: input.brand || "MankindPro",
-          mrp: input.mrp || input.price,
-          price: input.price,
-          unit: input.unit || "each",
-          rating: 5,
-          reviews: 0,
-          stock: input.stock,
-          tags: ["new"],
-          bestSeller: false,
-          isNew: true,
-          description: input.description || `${input.name} supplied by Mankind Healthcare.`,
-          specs: { Brand: input.brand || "MankindPro", SKU: `NEW-${String(seq).padStart(5, "0")}` },
-          seq: 1_000_000 + seq,
-        };
+        const product = buildProduct(input, seq);
         set((s) => ({ customProducts: [product, ...s.customProducts] }));
         return product;
+      },
+
+      importProducts: (rows) => {
+        const startSeq = PRODUCTS.length + get().customProducts.length + 1;
+        const created = rows
+          .filter((r) => r.name && r.categoryId && !isNaN(r.price))
+          .map((r, i) => buildProduct(r, startSeq + i));
+        if (created.length) set((s) => ({ customProducts: [...created, ...s.customProducts] }));
+        return created.length;
       },
 
       deleteProduct: (id) => {

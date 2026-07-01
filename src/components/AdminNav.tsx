@@ -7,6 +7,7 @@ import {
   Boxes,
   PlusCircle,
   BadgePercent,
+  Upload,
   Store,
   ShieldCheck,
 } from "lucide-react";
@@ -15,6 +16,7 @@ const LINKS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Products", icon: Boxes },
   { href: "/admin/products/new", label: "Add Product", icon: PlusCircle },
+  { href: "/admin/import", label: "Import", icon: Upload },
   { href: "/admin/offers", label: "Offers", icon: BadgePercent },
 ];
 

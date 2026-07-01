@@ -16,7 +16,7 @@ export default function NewProductPage() {
   const [created, setCreated] = useState<{ id: string; name: string } | null>(null);
   const [f, setF] = useState({
     name: "", brand: BRANDS[0], categoryId: CATEGORIES[0].id,
-    price: "", mrp: "", stock: "25", unit: "each", description: "",
+    price: "", mrp: "", stock: "25", unit: "each", description: "", image: "",
   });
 
   const set = (k: keyof typeof f, v: string) => {
@@ -46,6 +46,7 @@ export default function NewProductPage() {
       stock,
       unit: f.unit.trim() || "each",
       description: f.description.trim(),
+      image: f.image.trim() || undefined,
     });
     setCreated({ id: product.id, name: product.name });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -124,6 +125,10 @@ export default function NewProductPage() {
             <input className="field" value={f.unit} onChange={(e) => set("unit", e.target.value)} />
           </Field>
 
+          <Field label="Image URL" hint="Optional — paste a link to the product photo">
+            <input type="url" className="field" value={f.image} onChange={(e) => set("image", e.target.value)} placeholder="https://…" />
+          </Field>
+
           <Field label="Description">
             <textarea className="field min-h-28 resize-y py-2.5" value={f.description} onChange={(e) => set("description", e.target.value)} placeholder="Describe the product, its use and key specifications…" />
           </Field>
@@ -138,7 +143,7 @@ export default function NewProductPage() {
         <aside className="lg:sticky lg:top-8 lg:h-fit">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-ink-3">Live preview</p>
           <div className="card overflow-hidden">
-            <ProductMedia categoryId={f.categoryId} brand={f.brand} className="aspect-[4/3] w-full" iconClass="h-10 w-10" rounded="rounded-none" />
+            <ProductMedia categoryId={f.categoryId} brand={f.brand} image={f.image.trim() || undefined} className="aspect-[4/3] w-full" iconClass="h-10 w-10" rounded="rounded-none" />
             <div className="p-4">
               <p className="line-clamp-2 font-display text-sm font-semibold text-ink">{f.name || "Product name"}</p>
               <p className="mt-2 text-lg font-bold text-ink tnum">

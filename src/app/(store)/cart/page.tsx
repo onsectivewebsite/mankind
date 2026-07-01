@@ -65,7 +65,7 @@ export default function CartPage() {
           {items.map(({ line, product }) => (
             <div key={product.id} className="card flex gap-4 p-3 sm:p-4">
               <Link href={`/products/${product.id}`} className="shrink-0">
-                <ProductMedia categoryId={product.categoryId} className="h-24 w-24 sm:h-28 sm:w-28" iconClass="h-9 w-9" />
+                <ProductMedia categoryId={product.categoryId} image={product.image} className="h-24 w-24 sm:h-28 sm:w-28" iconClass="h-9 w-9" />
               </Link>
               <div className="flex min-w-0 flex-1 flex-col">
                 <span className="text-[11px] font-semibold uppercase tracking-wide text-primary">{categoryById(product.categoryId)?.name}</span>

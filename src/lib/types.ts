@@ -36,6 +36,8 @@ export type Product = {
   /** selling price in CAD before store offers */
   price: number;
   unit: string;
+  /** optional product photo URL (used when provided, e.g. via import) */
+  image?: string;
   rating: number;
   reviews: number;
   stock: number;

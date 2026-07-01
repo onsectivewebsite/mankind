@@ -73,6 +73,7 @@ export default function ProductDetailPage() {
           <ProductMedia
             categoryId={product.categoryId}
             brand={product.brand}
+            image={product.image}
             className="aspect-square w-full"
             iconClass="h-24 w-24"
             rounded="rounded-2xl"
