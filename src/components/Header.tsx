@@ -96,6 +96,7 @@ export function Header() {
   }, [mobileOpen]);
 
   return (
+    <>
     <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur-md">
       {/* utility bar */}
       <div className="hidden bg-ink text-white md:block">
@@ -240,6 +241,7 @@ export function Header() {
       <div className="container-page pb-3 md:hidden">
         <SearchBar />
       </div>
+    </header>
 
       {/* mobile drawer */}
       {mobileOpen ? (
@@ -306,6 +308,6 @@ export function Header() {
       ) : null}
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} initialMode={authMode} />
-    </header>
+    </>
   );
 }
