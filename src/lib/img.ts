@@ -1,3 +1,5 @@
+import { PHOTO_POOLS } from "./productPhotos";
+
 /** Build a sized Unsplash URL from a photo id (all ids verified to return 200). */
 export const unsplash = (id: string, w = 800, h?: number) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70${h ? `&h=${h}` : ""}`;
@@ -48,148 +50,147 @@ export const SHOWCASE = {
 /* ============================================================
    Per-product stock photography
    ------------------------------------------------------------
-   The catalogue is ~5,000 procedurally-generated SKUs, so photos
-   are resolved by keyword rather than hand-picked per SKU. We use
-   LoremFlickr (keyword-driven, always returns a 200) with a `lock`
-   seed that fixes WHICH photo the keyword returns.
+   The catalogue is ~5,000 procedurally-generated SKUs. Each product
+   resolves to a RELEVANT term (from its base name first, then its
+   category, then its industry), and we pick a photo from that term's
+   pool of curated, load-verified Unsplash images (see productPhotos.ts).
 
-   Two rules keep every product's photo UNIQUE:
-     1. lock = the product's globally-unique `seq` (1..N) — so no two
-        products ever share a lock (avoids birthday-paradox collisions).
-     2. keywords are SINGLE words — LoremFlickr's pool for a single term
-        is deep (hundreds of photos), whereas a comma-compound term
-        ("autoclave,sterilizer") collapses to ~1 photo and duplicates.
-   Together: a unique lock into a deep single-word pool → a distinct,
-   still-relevant, SSR/CSR-stable photo for each SKU.
+   The pick is `pool[seq % pool.length]` using the product's globally-
+   unique `seq`, so consecutive products in a category rotate through
+   the pool — relevant AND varied — and every product keeps the SAME
+   photo across SSR/CSR and reloads. Photos repeat only every N (≈6)
+   products that share a term (the documented relevance/variety trade).
+   Refresh the pools by re-running scratchpad/fetchphotos.mjs.
    ============================================================ */
 
-/** Single deep-pool keyword per category id — the relevance floor for its SKUs. */
-const CATEGORY_KEYWORDS: Record<string, string> = {
+/** Relevant search term per category id (must exist as a key in PHOTO_POOLS). */
+const CATEGORY_TERM: Record<string, string> = {
   // Dental
-  instruments: "dental",
-  consumables: "dentistry",
-  restorative: "dental",
+  instruments: "dental instruments",
+  consumables: "medical mask gloves",
+  restorative: "dental composite filling",
   endodontics: "dentist",
-  orthodontics: "braces",
-  sterilization: "laboratory",
+  orthodontics: "orthodontic braces",
+  sterilization: "autoclave sterilizer",
   imaging: "radiology",
   equipment: "dentist",
-  impression: "dental",
-  preventive: "toothpaste",
-  surgical: "surgery",
-  implants: "implant",
-  whitening: "teeth",
-  lab: "laboratory",
-  burs: "drill",
-  ppe: "mask",
+  impression: "dental impression mold",
+  preventive: "dental care toothbrush",
+  surgical: "oral surgery",
+  implants: "dental implant",
+  whitening: "teeth whitening",
+  lab: "dental instruments",
+  burs: "dental drill",
+  ppe: "medical protective gown",
   // Medical
-  "med-diagnostics": "stethoscope",
-  "med-consumables": "syringe",
-  "med-surgical": "surgery",
-  "med-ppe": "mask",
-  "med-wound": "bandage",
+  "med-diagnostics": "blood pressure monitor",
+  "med-consumables": "medical syringe",
+  "med-surgical": "surgical instruments",
+  "med-ppe": "medical mask gloves",
+  "med-wound": "wound bandage dressing",
   "med-mobility": "wheelchair",
-  "med-respiratory": "oxygen",
-  "med-emergency": "ambulance",
-  "med-ortho": "orthopedic",
-  "med-infusion": "infusion",
-  "med-lab": "laboratory",
-  "med-sterilization": "laboratory",
-  "med-aesthetic": "cosmetic",
+  "med-respiratory": "oxygen mask respiratory",
+  "med-emergency": "first aid kit",
+  "med-ortho": "knee brace orthopedic",
+  "med-infusion": "iv drip infusion",
+  "med-lab": "laboratory test tubes",
+  "med-sterilization": "autoclave sterilizer",
+  "med-aesthetic": "facial treatment",
   "med-nursing": "hospital",
   "med-cardiology": "cardiology",
   // Veterinary
-  "vet-instruments": "veterinary",
-  "vet-diagnostics": "veterinarian",
-  "vet-consumables": "veterinary",
-  "vet-surgical": "veterinary",
-  "vet-dental": "dog",
-  "vet-anesthesia": "veterinary",
-  "vet-grooming": "grooming",
-  "vet-pharmacy": "medicine",
-  "vet-largeanimal": "cattle",
+  "vet-instruments": "veterinary surgery instruments",
+  "vet-diagnostics": "veterinarian dog examination",
+  "vet-consumables": "veterinary syringe",
+  "vet-surgical": "veterinary surgery",
+  "vet-dental": "dog teeth veterinary",
+  "vet-anesthesia": "veterinary anesthesia",
+  "vet-grooming": "dog grooming",
+  "vet-pharmacy": "veterinary medicine",
+  "vet-largeanimal": "cattle farm veterinarian",
   "vet-imaging": "radiology",
   // Physiotherapy
-  "physio-electro": "physiotherapy",
-  "physio-ultrasound": "ultrasound",
-  "physio-exercise": "fitness",
-  "physio-hotcold": "ice",
+  "physio-electro": "physiotherapy electrotherapy",
+  "physio-ultrasound": "ultrasound therapy physiotherapy",
+  "physio-exercise": "physiotherapy rehabilitation exercise",
+  "physio-hotcold": "ice pack cold therapy",
   "physio-tables": "massage",
-  "physio-shockwave": "laser",
-  "physio-supports": "orthopedic",
-  "physio-massage": "massage",
+  "physio-shockwave": "laser therapy physiotherapy",
+  "physio-supports": "knee support brace",
+  "physio-massage": "massage therapy",
 };
 
 /** Industry floor, used when a category id is somehow unmapped. */
-const INDUSTRY_KEYWORDS: Record<string, string> = {
+const INDUSTRY_TERM: Record<string, string> = {
   dental: "dentist",
   medical: "hospital",
-  veterinary: "veterinary",
-  physiotherapy: "physiotherapy",
+  veterinary: "veterinary surgery",
+  physiotherapy: "physiotherapy rehabilitation exercise",
 };
 
 /**
- * Base-name → single keyword overrides, checked in order (first match wins).
+ * Base-name → term overrides, checked in order (first match wins).
  * These sharpen relevance for distinctive items that span many categories
  * (gloves, wheelchairs, lasers, braces, …) regardless of their category.
- * Every value is ONE word so its LoremFlickr pool stays deep enough to
- * keep photos unique across the many SKUs that share it.
+ * Every value must be a key in PHOTO_POOLS.
  */
-const BASE_RULES: [RegExp, string][] = [
-  [/glove/i, "gloves"],
-  [/mask|respirator/i, "mask"],
+const BASE_TERM_RULES: [RegExp, string][] = [
+  [/glove/i, "medical gloves"],
+  [/mask|respirator/i, "surgical mask"],
   [/wheelchair/i, "wheelchair"],
-  [/walker|crutch|\bcane\b|rollator/i, "walker"],
-  [/laser/i, "laser"],
-  [/ultrasound/i, "ultrasound"],
-  [/nebulizer|oxygen|cannula|ambu/i, "oxygen"],
-  [/syringe/i, "syringe"],
-  [/needle/i, "needle"],
-  [/scalpel|blade/i, "scalpel"],
-  [/forceps|scissors|retractor|hemostat|rongeur|curette|elevator/i, "surgery"],
-  [/autoclave|steriliz|pouch/i, "laboratory"],
-  [/microscope|slide|petri|centrifuge|pipette|vacutainer/i, "microscope"],
-  [/thermometer/i, "thermometer"],
-  [/oximeter/i, "oximeter"],
+  [/walker|crutch|\bcane\b|rollator/i, "walking frame mobility"],
+  [/laser/i, "medical laser device"],
+  [/ultrasound/i, "ultrasound machine"],
+  [/nebulizer|oxygen|cannula|ambu/i, "oxygen mask respiratory"],
+  [/syringe/i, "syringe injection"],
+  [/needle/i, "hypodermic needle"],
+  [/scalpel|blade/i, "scalpel surgery"],
+  [/forceps|scissors|retractor|hemostat|rongeur|curette|elevator/i, "surgical instruments"],
+  [/autoclave|steriliz|pouch/i, "autoclave sterilizer"],
+  [/microscope|slide|petri|centrifuge|pipette|vacutainer/i, "laboratory microscope"],
+  [/thermometer/i, "medical thermometer"],
+  [/oximeter/i, "pulse oximeter"],
   [/stethoscope/i, "stethoscope"],
   [/x-?ray|sensor|phosphor|radiograph/i, "radiology"],
-  [/commode|bedpan|urinal|patient/i, "hospital"],
-  [/brace|splint|collar|sling|support|compression|stabiliz/i, "orthopedic"],
-  [/chair|operatory|stool|cuspidor/i, "dentist"],
-  [/table|plinth|traction/i, "massage"],
-  [/band|resistance|balance|putty|pulley|pedal|stability|\bball\b/i, "fitness"],
-  [/massage|roller|cupping|percussion/i, "massage"],
-  [/tens|ems|stimulator|electrode|interferential|microcurrent/i, "physiotherapy"],
-  [/paraffin|cryo|\bice\b|cold pack|hot pack/i, "ice"],
-  [/whiten|bleach/i, "teeth"],
-  [/implant|abutment/i, "implant"],
-  [/bracket|arch wire|molar band|ligature|ortho/i, "braces"],
-  [/clipper|grooming|slicker|nail trimmer/i, "grooming"],
-  [/ecg|holter|defibrillator|telemetry|electrode/i, "cardiology"],
-  [/bandage|dressing|gauze|suture|wound/i, "bandage"],
-  [/first aid|emergency|tourniquet|trauma/i, "ambulance"],
+  [/brace|splint|collar|compression|stabiliz/i, "knee brace orthopedic"],
+  [/operatory|cuspidor/i, "dentist"],
+  [/plinth|traction/i, "massage"],
+  [/band|resistance|balance|putty|pulley|pedal|stability|\bball\b/i, "resistance band fitness"],
+  [/massage|roller|cupping|percussion/i, "massage therapy"],
+  [/tens|ems|stimulator|electrode|interferential|microcurrent/i, "physiotherapy electrotherapy"],
+  [/paraffin|cryo|\bice\b|cold pack|hot pack/i, "ice pack cold therapy"],
+  [/whiten|bleach/i, "teeth whitening"],
+  [/implant|abutment/i, "dental implant"],
+  [/bracket|arch wire|molar band|ligature|ortho/i, "orthodontic braces"],
+  [/clipper|grooming|slicker|nail trimmer/i, "dog grooming"],
+  [/ecg|holter|defibrillator|telemetry/i, "cardiology"],
+  [/bandage|dressing|gauze|suture|wound/i, "wound bandage dressing"],
+  [/first aid|emergency|tourniquet|trauma/i, "first aid kit"],
 ];
 
-/** Resolve the best single keyword for a product from its base name and category. */
-export function keywordFor(base: string, categoryId: string, industryId?: string): string {
-  for (const [re, kw] of BASE_RULES) if (re.test(base)) return kw;
+/** Resolve the most relevant PHOTO_POOLS term for a product. */
+function termFor(base: string, categoryId: string, industryId?: string): string {
+  for (const [re, term] of BASE_TERM_RULES) if (re.test(base)) return term;
   return (
-    CATEGORY_KEYWORDS[categoryId] ??
-    (industryId ? INDUSTRY_KEYWORDS[industryId] : undefined) ??
-    "medical"
+    CATEGORY_TERM[categoryId] ??
+    (industryId ? INDUSTRY_TERM[industryId] : undefined) ??
+    "hospital"
   );
 }
 
 /**
- * Deterministic LoremFlickr URL for a product photo.
- * Pass the product's unique `seq` as `lock` so every SKU gets a distinct,
- * stable photo from the keyword's pool — same image on every render/reload.
+ * Pick a curated, relevant Unsplash photo URL for a product.
+ * Deterministic: the same `seq` always yields the same photo, so it is
+ * stable across SSR/CSR and reloads. Rotates through the term's pool so
+ * neighbouring products in a category look varied.
  */
-export function productImageUrl(keyword: string, lock: number, size = 600): string {
-  const kw = keyword
-    .toLowerCase()
-    .replace(/[^a-z,]+/g, ",")
-    .replace(/,+/g, ",")
-    .replace(/(^,|,$)/g, "");
-  return `https://loremflickr.com/${size}/${size}/${kw}?lock=${lock}`;
+export function productPhoto(base: string, categoryId: string, seq: number, industryId?: string): string {
+  const term = termFor(base, categoryId, industryId);
+  let pool = PHOTO_POOLS[term];
+  if (!pool || pool.length === 0) {
+    pool = PHOTO_POOLS[INDUSTRY_TERM[industryId ?? "medical"] ?? "hospital"] ?? PHOTO_POOLS["hospital"];
+  }
+  if (!pool || pool.length === 0) return unsplash(PHOTO.hero, 600); // absolute fallback
+  const id = pool[Math.abs(seq) % pool.length];
+  return unsplash(id, 600);
 }

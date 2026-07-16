@@ -1,5 +1,5 @@
 import type { Category, Industry, IndustryId, Product } from "@/lib/types";
-import { INDUSTRY_PHOTO, keywordFor, productImageUrl } from "@/lib/img";
+import { INDUSTRY_PHOTO, productPhoto } from "@/lib/img";
 
 /* ============================================================
    Industries — Mankind is a one-stop supplier across all three
@@ -410,9 +410,9 @@ function buildCatalog(): Product[] {
         const price = hasDeal ? round99(rawMrp * (0.7 + seed * 0.18)) : mrp;
 
         const name = `${brand} ${base} — ${variant}`;
-        // Unique per-SKU stock photo: keyword from base/category, lock = the
-        // product's globally-unique seq so no two SKUs ever share a photo.
-        const image = productImageUrl(keywordFor(base, bp.cat, bp.industry), seq);
+        // Relevant per-SKU stock photo: term from base/category, rotated
+        // through that term's curated Unsplash pool by the unique seq.
+        const image = productPhoto(base, bp.cat, seq, bp.industry);
         const specs: Record<string, string> = {};
         for (const [label, sample] of bp.specKeys) {
           const opts = sample.split("|");
