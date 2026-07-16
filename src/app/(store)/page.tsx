@@ -3,17 +3,17 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import {
-  ArrowRight, Truck, Tag, Star, CheckCircle2, Sparkles,
+  ArrowRight, Truck, Tag, CheckCircle2,
   BadgeCheck, Award, Headphones, Wallet, Boxes,
 } from "lucide-react";
-import { INDUSTRIES, CATEGORIES, PRODUCT_COUNT, categoriesByIndustry } from "@/data/catalog";
+import { INDUSTRIES, PRODUCT_COUNT, categoriesByIndustry } from "@/data/catalog";
 import { usePricedProducts, useOffers } from "@/store/hooks";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Photo } from "@/components/Photo";
 import { PHOTO } from "@/lib/img";
 import { HeroSlider } from "@/components/HeroSlider";
-import { Reveal, Marquee, CountUp } from "@/components/motion";
+import { Reveal, Marquee } from "@/components/motion";
 import type { IndustryId } from "@/lib/types";
 
 const THEME: Record<IndustryId, { hex: string; soft: string }> = {
@@ -68,64 +68,12 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden border-b border-line bg-section">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="animate-blob absolute -left-24 -top-24 h-80 w-80 bg-primary/25 blur-3xl" />
-          <div className="animate-blob absolute -right-16 top-20 h-72 w-72 bg-accent/20 blur-3xl" style={{ animationDelay: "-5s" }} />
-          <div className="animate-blob absolute bottom-0 left-1/3 h-64 w-64 bg-[#b8924f]/20 blur-3xl" style={{ animationDelay: "-9s" }} />
-        </div>
-
-        <div className="container-page relative grid gap-10 py-14 md:grid-cols-2 md:py-20">
-          <div className="flex flex-col justify-center animate-fade-up">
-            <span className="chip mb-4 w-fit border border-line bg-white text-primary shadow-sm">
-              <Sparkles className="h-4 w-4 text-gold" /> One-stop healthcare supplier · Canada
-            </span>
-            <h1 className="text-4xl font-extrabold leading-[1.04] text-ink md:text-5xl lg:text-[3.5rem]">
-              <span className="text-gradient">Dental, Medical, Veterinary &amp; Physiotherapy</span> supplies — one trusted source.
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-ink-2">
-              {PRODUCT_COUNT.toLocaleString()}+ clinic-grade products across dental, medical,
-              veterinary &amp; physiotherapy. Competitive trade pricing, fast dispatch and expert support.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/products" className="btn btn-gradient text-base">
-                Browse all products <ArrowRight className="h-5 w-5" />
-              </Link>
-              <Link href="/offers" className="btn btn-outline text-base">
-                <Tag className="h-5 w-5" /> Today&apos;s offers
-              </Link>
-            </div>
-            <div className="mt-9 grid max-w-md grid-cols-3 gap-4">
-              {[
-                { n: PRODUCT_COUNT, s: "+", l: "Products" },
-                { n: 4, s: "", l: "Fields covered" },
-                { n: CATEGORIES.length, s: "+", l: "Categories" },
-              ].map((stat) => (
-                <div key={stat.l}>
-                  <p className="text-2xl font-extrabold text-ink md:text-3xl">
-                    <CountUp to={stat.n} suffix={stat.s} />
-                  </p>
-                  <p className="text-xs font-medium text-ink-3">{stat.l}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* hero slider */}
-          <div className="relative">
-            <HeroSlider />
-            <div className="absolute -bottom-5 -left-4 hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-lift)] sm:flex sm:items-center sm:gap-3">
-              <div className="flex items-center gap-1 text-amber-400">
-                {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-              </div>
-              <div className="leading-tight">
-                <p className="text-sm font-semibold text-ink">Trusted by 2,400+ clinicians</p>
-                <p className="text-xs text-ink-3">Dental · Medical · Veterinary · Physiotherapy</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* ============ HERO — auto-scrolling image slider, fits viewport under the sticky header ============ */}
+      <section className="border-b border-line">
+        <HeroSlider
+          aspectClass="h-[calc(100svh-125px)] w-full md:h-[calc(100svh-101px)]"
+          roundedClass="rounded-none"
+        />
       </section>
 
       {/* ============ INDUSTRY SEGMENTS ============ */}

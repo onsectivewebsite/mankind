@@ -7,7 +7,13 @@ import { Photo } from "./Photo";
 
 const INTERVAL = 4500;
 
-export function HeroSlider() {
+export function HeroSlider({
+  aspectClass = "aspect-[4/3] w-full sm:aspect-[16/11]",
+  roundedClass = "rounded-3xl",
+}: {
+  aspectClass?: string;
+  roundedClass?: string;
+} = {}) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = HERO_SLIDES.length;
@@ -27,7 +33,7 @@ export function HeroSlider() {
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl shadow-[var(--shadow-lift)]"
+      className={`relative overflow-hidden ${roundedClass} shadow-[var(--shadow-lift)]`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
@@ -41,7 +47,7 @@ export function HeroSlider() {
       aria-roledescription="carousel"
       aria-label="Mankind Healthcare highlights"
     >
-      <div className="relative aspect-[4/3] w-full sm:aspect-[16/11]">
+      <div className={`relative ${aspectClass}`}>
         {HERO_SLIDES.map((slide, i) => (
           <div
             key={slide.id}
@@ -49,7 +55,7 @@ export function HeroSlider() {
             style={{ opacity: i === index ? 1 : 0 }}
             aria-hidden={i !== index}
           >
-            <Photo id={slide.id} alt={`${slide.label} — ${slide.caption}`} priority={i === 0} width={1100} className="h-full w-full" />
+            <Photo id={slide.id} alt={`${slide.label} — ${slide.caption}`} priority={i === 0} width={1800} className="h-full w-full" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" />
             <div className="absolute bottom-5 left-5 right-16">
               <span className="chip mb-2 w-fit bg-gold text-[color:var(--color-on-gold)]">{slide.label}</span>

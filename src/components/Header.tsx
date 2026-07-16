@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Search, ShoppingCart, Menu, X, Phone, Mail, Truck, ChevronDown, LayoutGrid, Tag,
-  Home, User as UserIcon, LogOut, LayoutDashboard, LogIn,
+  Home, User as UserIcon, LogOut, LogIn,
 } from "lucide-react";
 import { INDUSTRIES, categoriesByIndustry, PRODUCT_COUNT } from "@/data/catalog";
 import { useCart, cartCount } from "@/store/cart";
 import { useAuth, useCurrentUser } from "@/store/auth";
 import { AuthModal } from "./AuthModal";
 import { SocialLinks } from "./SocialLinks";
-import { CategoryIcon } from "./CategoryIcon";
 import type { IndustryId } from "@/lib/types";
 
 const INDUSTRY_COLOR: Record<IndustryId, { text: string; soft: string; dot: string }> = {
@@ -72,6 +71,7 @@ export function Header() {
   const hydrated = useCart((s) => s._hydrated);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openInd, setOpenInd] = useState<IndustryId | null>(null);
   const count = hydrated ? cartCount(lines) : 0;
 
   const currentUser = useCurrentUser();
@@ -144,7 +144,7 @@ export function Header() {
               <LayoutGrid className="h-4 w-4" /> Shop <ChevronDown className="h-4 w-4" />
             </button>
             {menuOpen ? (
-              <div className="absolute right-0 top-full w-[60rem] pt-2">
+              <div className="absolute left-0 top-full w-[44rem] max-w-[calc(100vw-2rem)] pt-2">
                 <div className="card grid grid-cols-4 gap-2 p-3">
                   {INDUSTRIES.map((ind) => (
                     <div key={ind.id}>
@@ -214,9 +214,6 @@ export function Header() {
                   <Link href="/cart" onClick={() => setAcctOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-2 hover:bg-muted">
                     <ShoppingCart className="h-4 w-4" /> My cart
                   </Link>
-                  <Link href="/admin" onClick={() => setAcctOpen(false)} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-2 hover:bg-muted">
-                    <LayoutDashboard className="h-4 w-4" /> Admin panel
-                  </Link>
                   <button onClick={() => { logout(); setAcctOpen(false); }} className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[#b23b38] hover:bg-[#fdecea]">
                     <LogOut className="h-4 w-4" /> Sign out
                   </button>
@@ -278,31 +275,47 @@ export function Header() {
               <Link href="/" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Home className="h-4 w-4" /> Home</Link>
               <Link href="/offers" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Tag className="h-4 w-4" /> Offers</Link>
               <Link href="/contact" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><Mail className="h-4 w-4" /> Contact</Link>
-              <Link href="/admin" className="btn btn-ghost justify-start" onClick={() => setMobileOpen(false)}><LayoutDashboard className="h-4 w-4" /> Admin Panel</Link>
             </nav>
-            {INDUSTRIES.map((ind) => (
-              <div key={ind.id} className="mb-2">
-                <Link
-                  href={`/products?industry=${ind.id}`}
-                  onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-2 px-1 py-2 font-display text-sm font-bold ${INDUSTRY_COLOR[ind.id].text}`}
-                >
-                  <span className={`h-2 w-2 rounded-full ${INDUSTRY_COLOR[ind.id].dot}`} /> {ind.name}
-                </Link>
-                <div className="grid grid-cols-2 gap-1">
-                  {categoriesByIndustry(ind.id).map((c) => (
-                    <Link
-                      key={c.id}
-                      href={`/products?category=${c.id}`}
-                      onClick={() => setMobileOpen(false)}
-                      className="truncate rounded-md px-2 py-1.5 text-[13px] text-ink-2 hover:bg-muted"
-                    >
-                      {c.name}
-                    </Link>
-                  ))}
+            <p className="mb-1 mt-2 px-1 text-[11px] font-bold uppercase tracking-wider text-ink-3">Shop by field</p>
+            {INDUSTRIES.map((ind) => {
+              const expanded = openInd === ind.id;
+              return (
+                <div key={ind.id} className="mb-1.5 overflow-hidden rounded-xl border border-line">
+                  <button
+                    type="button"
+                    onClick={() => setOpenInd(expanded ? null : ind.id)}
+                    aria-expanded={expanded}
+                    className={`flex w-full items-center gap-2 px-3 py-2.5 font-display text-sm font-bold ${INDUSTRY_COLOR[ind.id].text}`}
+                  >
+                    <span className={`h-2 w-2 rounded-full ${INDUSTRY_COLOR[ind.id].dot}`} /> {ind.name}
+                    <ChevronDown className={`ml-auto h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
+                  </button>
+                  {expanded ? (
+                    <div className="border-t border-line bg-canvas p-2">
+                      <div className="grid grid-cols-2 gap-1">
+                        {categoriesByIndustry(ind.id).map((c) => (
+                          <Link
+                            key={c.id}
+                            href={`/products?category=${c.id}`}
+                            onClick={() => setMobileOpen(false)}
+                            className="truncate rounded-md px-2 py-1.5 text-[13px] text-ink-2 hover:bg-muted"
+                          >
+                            {c.name}
+                          </Link>
+                        ))}
+                      </div>
+                      <Link
+                        href={`/products?industry=${ind.id}`}
+                        onClick={() => setMobileOpen(false)}
+                        className={`mt-1 inline-block px-2 py-1 text-[13px] font-semibold ${INDUSTRY_COLOR[ind.id].text} hover:underline`}
+                      >
+                        View all {ind.name} →
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ) : null}

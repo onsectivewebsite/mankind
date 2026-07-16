@@ -100,6 +100,7 @@ export function Footer() {
             <Link href="/contact" className="hover:text-gold">Contact</Link>
             <Link href="/terms" className="hover:text-gold">Terms &amp; Conditions</Link>
             <Link href="/offers" className="hover:text-gold">Offers</Link>
+            <Link href="/admin" className="hover:text-gold">Admin</Link>
           </div>
           <p className="text-center md:text-right">Prices in CAD · Serving all four fields</p>
         </div>
