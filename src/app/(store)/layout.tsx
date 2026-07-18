@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { OfferPopup } from "@/components/OfferPopup";
+import { MaintenancePopup } from "@/components/MaintenancePopup";
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,6 +12,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
       </main>
       <Footer />
       <OfferPopup />
+      <MaintenancePopup />
     </>
   );
 }

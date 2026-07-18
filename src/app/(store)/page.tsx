@@ -49,7 +49,8 @@ export default function HomePage() {
     const pool = products.filter((p) => p.bestSeller && p.stock > 0);
     const seen = new Set<string>();
     const diverse = pool.filter((p) => (seen.has(p.categoryId) ? false : (seen.add(p.categoryId), true)));
-    return (diverse.length >= 8 ? diverse : [...diverse, ...pool]).slice(0, 8);
+    const combined = diverse.length >= 8 ? diverse : [...diverse, ...pool];
+    return combined.filter((p, i, a) => a.findIndex((x) => x.id === p.id) === i).slice(0, 8);
   }, [products]);
 
   const deals = useMemo(() => {
@@ -58,7 +59,8 @@ export default function HomePage() {
       .sort((a, b) => b.discountPercent - a.discountPercent);
     const seen = new Set<string>();
     const diverse = pool.filter((p) => (seen.has(p.categoryId) ? false : (seen.add(p.categoryId), true)));
-    return (diverse.length >= 8 ? diverse : [...diverse, ...pool]).slice(0, 8);
+    const combined = diverse.length >= 8 ? diverse : [...diverse, ...pool];
+    return combined.filter((p, i, a) => a.findIndex((x) => x.id === p.id) === i).slice(0, 8);
   }, [products]);
 
   const featuredCats = useMemo(
